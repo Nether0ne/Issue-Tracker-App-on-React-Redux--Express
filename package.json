@@ -1,0 +1,20 @@
+{
+  "name": "Issue Tracker App",
+  "version": "1.0.0",
+  "description": "Issue Tracker App for Freshcode, built on React+Redux, Express",
+  "main": "server.js",
+  "scripts": {
+    "client-install": "cd client && npm install",
+    "start": "node server/server.js",
+    "server": "nodemon server/server.js",
+    "client": "npm start --prefix client",
+    "dev": "concurrently \"npm run server\" \"npm run client\""
+  },
+  "author": "Yan Stoyanov",
+  "license": "MIT",
+  "dependencies": {
+    "concurrently": "^4.1.1",
+    "express": "^4.17.1",
+    "nodemon": "^1.19.1"
+  }
+}
