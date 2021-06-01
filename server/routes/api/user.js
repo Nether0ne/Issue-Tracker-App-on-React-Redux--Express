@@ -4,16 +4,16 @@ const User = mongoose.model('User');
 const passport = require('passport');
 const auth = require('../auth');
 
-router.get('/user/:id', auth.required, function(req, res, next){
-    User.findById(req.params.id).then(function(user){
+router.get('/user/:id', auth.required, (req, res, next) => {
+    User.findById(req.params.id).then((user) => {
       if(!user){ return res.sendStatus(401); }
   
       return res.json({user: user.toAuthJSON()});
     }).catch(next);
   });
   
-router.put('/user', auth.required, function(req, res, next){
-  User.findById(req.body.id).then(function(user){
+router.put('/user', auth.required, (req, res, next) => {
+  User.findById(req.body.id).then((user) => {
     if(!user){ return res.sendStatus(401); }
 
     // only update fields that were actually passed...
@@ -24,13 +24,13 @@ router.put('/user', auth.required, function(req, res, next){
       user.setPassword(req.body.user.password);
     }
   
-    return user.save().then(function(){
+    return user.save().then(() => {
       return res.json({user: user.toAuthJSON()});
     });
   }).catch(next);
 });
 
-router.post('/user/login', function(req, res, next){
+router.post('/user/login', (req, res, next) => {
   if(!req.body.user.email){
     return res.status(422).json({errors: {email: 'can\'t be blank'}});
   }
@@ -39,7 +39,7 @@ router.post('/user/login', function(req, res, next){
     return res.status(422).json({errors: {password: 'can\'t be blank'}});
   }
 
-  passport.authenticate('local', {session: false}, function(err, user, info){
+  passport.authenticate('local', {session: false}, (err, user, info) => {
     if(err){ return next(err); }
 
     if(user){
@@ -51,14 +51,14 @@ router.post('/user/login', function(req, res, next){
   })(req, res, next);
 });
   
-router.post('/user/register', function(req, res, next){
-  var user = new User();
+router.post('/user/register', (req, res, next) => {
+  let user = new User();
 
   user.username = req.body.user.username;
   user.email = req.body.user.email;
   user.setPassword(req.body.user.password);
 
-  user.save().then(function(){
+  user.save().then(() => {
     return res.json({user: user.toAuthJSON()});
   }).catch(next);
 });

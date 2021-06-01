@@ -1,13 +1,13 @@
 const mongoose = require('mongoose');
-const uniqueValidator = require('mongoose-unique-validator');
-const User = mongoose.model('User');
-
+ 
 const BoardSchema = new mongoose.Schema({
-  title: String,
-  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'}
+  title: String,  
+  createdBy: { type: mongoose.Schema.Types.ObjectId, ref: 'User'},
+  queues: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Queue' } ],
+  activities: [ { type: mongoose.Schema.Types.ObjectId, ref: 'Activity' } ]
 }, {timestamps: true});
 
-BoardSchema.methods.updateTitle = function(title) {
+BoardSchema.methods.updateTitle = (title) => {
   this.title = title;
 }
 

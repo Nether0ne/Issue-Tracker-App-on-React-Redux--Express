@@ -4,23 +4,30 @@ const crypto = require('crypto');
 const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
-  email: {type: String, lowercase: true, unique: true, required: [true, "can't be blank"], match: [/\S+@\S+\.\S+/, 'is invalid'], index: true},
+  email: {
+    type: String, 
+    lowercase: true, 
+    unique: true, 
+    required: [true, "can't be blank"], 
+    match: [/\S+@\S+\.\S+/, 'is invalid'], 
+    index: true
+  },
   password: String,
   salt: String
 }, {timestamps: true});
 
 UserSchema.plugin(uniqueValidator, {message: 'is already taken'});
 
-UserSchema.methods.validPassword = function(password) {
+UserSchema.methods.validPassword = (password) => {
   return this.password === crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UserSchema.methods.setPassword = function(password) {
+UserSchema.methods.setPassword = (password) => {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UserSchema.methods.generateJWT = function() {
+UserSchema.methods.generateJWT = () => {
   const today = new Date();
   const expire = new Date(today);
   expire.setDate(today.getDate() + 60);
@@ -32,14 +39,15 @@ UserSchema.methods.generateJWT = function() {
   }, process.env.SECRET);
 };
 
-UserSchema.methods.toAuthJSON = function() {
+UserSchema.methods.toAuthJSON = () => {
   return {
+    id: this._id,
     email: this.email,
     token: this.generateJWT()
   }
 };
 
-UserSchema.methods.toProfileJSONFor = function(user) {
+UserSchema.methods.toProfileJSONFor = () => {
   return {
     email: this.email,
     createdAt: this.createdAt

@@ -30,7 +30,7 @@ if (!isProduction) {
 
 mongoose.Promise = global.Promise;
 
-if(isProduction){
+if (isProduction){
   mongoose.connect(process.env.MONGODB_URI);
 } else {
   mongoose.connect('mongodb://127.0.0.1/' + process.env.db_name, {
@@ -43,13 +43,15 @@ if(isProduction){
 }
 
 require('./models/User');
-//require('./models/Board');
+require('./models/Activity');
+require('./models/Task');
+require('./models/Queue');
+require('./models/Board');
 
 app.use(require('./routes'));
 
 /// catch 404 and forward to error handler
 app.use(function(req, res, next) {
-  console.log(req)
   var err = new Error('Not Found');
   err.status = 404;
   next(err);
