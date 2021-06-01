@@ -44,6 +44,7 @@ if (isProduction){
 
 require('./models/User');
 require('./models/Activity');
+require('./models/Comment');
 require('./models/Task');
 require('./models/Queue');
 require('./models/Board');

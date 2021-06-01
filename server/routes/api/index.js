@@ -1,7 +1,10 @@
 var router = require('express').Router();
 
-router.use('/', require('./user'));
-router.use('/', require('./board'));
+router.use('/user', require('./user'));
+router.use('/board', require('./board'));
+router.use('/queue', require('./queue'));
+router.use('/task', require('./task'));
+router.use('/comment', require('./comment'));
 
 router.use(function(err, req, res, next){
   if(err.name === 'ValidationError'){

@@ -1,12 +1,13 @@
 const router = require('express').Router();
 const mongoose = require('mongoose');
-const { route } = require('./user');
 const Board = mongoose.model('Board');
 const Queue = mongoose.model('Queue');
 const Task = mongoose.model('Task');
+const Comment = mongoose.model('Comment');
 const Activity = mongoose.model('Activity');
+const ActivityService = require('../../services/activityService');
 
-router.get('/board/:id', (req, res, next) => {
+router.get('/:id', (req, res, next) => {
   Board.findById(req.params.id)
     .populate({
       path: 'queues',
@@ -18,21 +19,17 @@ router.get('/board/:id', (req, res, next) => {
     .then((board) => { 
       if(!board){ return res.sendStatus(401); }
 
-      res.json({"board" : board.toJSON()}) 
+      res.json({
+        success : true,
+        board : board.toJSON()
+      });
     }).catch(next);
 });
 
-router.post('/board', (req, res, next) => {
+router.post('/', (req, res, next) => {
   const board = new Board();
   board.title = req.body.board.title;
   board.createdBy = '60b5112e26cad05568339c57'; // TEMP userID
-
-  const activity = new Activity();
-  activity.action = 'Created board ' + board.title + '! Congratulations!';
-  //activity.createdBy = currentUserId; TODO
-  
-  activity.save();
-  board.activities.push(activity);
 
   const queue = new Queue();
   queue.title = 'Test';
@@ -47,75 +44,106 @@ router.post('/board', (req, res, next) => {
   board.queues.push(queue);
 
   board.save().then(() => {
-    return res.json({board: board})
+    const activity = new ActivityService(
+      board._id,
+      'board',
+      board.createdBy,
+      {
+        type : 'create'
+      }
+    );
+    
+    activity.log().then(() => {
+      res.json({
+        success : true,
+        board : board.populate({
+          path : 'queues',
+          populate : {
+            path : 'tasks'
+          }
+        })
+        .toJSON()
+      })
+    });
   }).catch(next);
 });
 
-router.put('/board', (req, res, next) => {
+router.put('/', (req, res, next) => {
   const params = req.body;
 
-  Board.findById(params.board.id).then(async (board) => {
+  Board.findById(params.board.id).then((board) => {
     if (!board) {
       return res.sendStatus(401); 
     }
 
     if (typeof params.board.title !== 'undefined') {
       board.title = req.body.board.title;
+      const activity = new ActivityService(
+        board._id,
+        'board',
+        board.createdBy, // TODO change to current user
+        {
+          type : 'update'
+        }
+      );
+      activity.log();
     }
-
-    // TODO activity on one of the edit events
-    // if (params.board.activity) {
-    //   const activity = new Activity();
-    //   activity.setAction(params.board.activity.action);
-    //   activity.createdBy = params.board.activity.createdBy;
-    //   activity.save();
-
-    //   board.activities.push(activity);
-    // }
-
-    if (params.board.queue) {
-      let queue = Queue.findById(params.board.queue.id);
-      if (typeof queue.id === 'undefined') {
-        queue = new Queue();
-      }
-
-      if (typeof params.board.queue.title !== 'undefined') {
-        queue.title = params.board.queue.title;
-      }
-      
-      if (typeof params.board.queue.task !== 'undefined') {
-        let task = Task.findById(params.board.queue.task.id);
-
-        if (!task) {
-          task = new Task();
-        }
-
-        if (typeof params.board.queue.task.position !== 'undefined') { // TODO position set
-
-        }
-
-        if (typeof params.board.queue.task.title !== 'undefined') {
-          task.title = params.board.queue.task.title;
-        }
-
-        if (typeof params.board.queue.task.description !== 'undefined') {
-          task.description = params.board.queue.task.description;
-        }
-
-        task.save();        
-        queue.tasks.push(task);
-      }
-      
-      console.log(queue);
-      queue.save();
-      board.queues.push(queue);
-    }
-
-    return board.save();
-  }).then((board) => { 
-    res.json({
-      "board" : board.toJSON()
+    
+    board.save().then((board) => { 
+      res.json({
+        success : true,
+        board : board.populate({
+          path : 'queues',
+          populate : {
+            path : 'tasks'
+          }
+        })
+        .populate('activities')
+        .toJSON()
+      });
     });
+  }).catch(next);
+});
+
+router.delete('/', (req, res, next) => {
+  Board.findById(req.body.board.id).then((board) => {
+    return new Promise(async (resolve, reject) => {
+      if (!board) {} // todo return error
+      await Activity.find({ _id : { $in : board.activities }}).then((activities) => {
+        activities.forEach((a) => {
+          a.delete();
+        });
+      }).then(async () => {
+        await Queue.find({ _id : { $in : board.queues }}).then((queues) => {
+          queues.forEach(async (q) => {
+            await Task.find({ _id : { $in : q.tasks }}).then((tasks) => {
+              tasks.forEach(async (t) => {
+                await Comment.find({ _id : { $in : t.comments }}).then( (comments) => {
+                  comments.forEach((c) => {
+                    t.comments.pull(c.id);
+                    c.delete();
+                  });
+                }).then(() => {
+                  q.tasks.pull(t.id);
+                  t.delete();
+                });
+              });          
+            }).then(() => {
+              board.queues.pull(q.id);
+              q.delete();
+            });
+          });
+        });
+      })
+      
+      return resolve(board);
+    });
+  }).then((board) => {
+    return board.delete();
+  }).then((result) => {
+    res.json({
+      success : !!result
+    })
   }).catch(next);
 });
 

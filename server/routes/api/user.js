@@ -4,7 +4,7 @@ const User = mongoose.model('User');
 const passport = require('passport');
 const auth = require('../auth');
 
-router.get('/user/:id', auth.required, (req, res, next) => {
+router.get('/:id', auth.required, (req, res, next) => {
     User.findById(req.params.id).then((user) => {
       if(!user){ return res.sendStatus(401); }
   
@@ -12,7 +12,7 @@ router.get('/user/:id', auth.required, (req, res, next) => {
     }).catch(next);
   });
   
-router.put('/user', auth.required, (req, res, next) => {
+router.put('/', auth.required, (req, res, next) => {
   User.findById(req.body.id).then((user) => {
     if(!user){ return res.sendStatus(401); }
 
@@ -30,7 +30,7 @@ router.put('/user', auth.required, (req, res, next) => {
   }).catch(next);
 });
 
-router.post('/user/login', (req, res, next) => {
+router.post('/login', (req, res, next) => {
   if(!req.body.user.email){
     return res.status(422).json({errors: {email: 'can\'t be blank'}});
   }
@@ -51,7 +51,7 @@ router.post('/user/login', (req, res, next) => {
   })(req, res, next);
 });
   
-router.post('/user/register', (req, res, next) => {
+router.post('/register', (req, res, next) => {
   let user = new User();
 
   user.username = req.body.user.username;
