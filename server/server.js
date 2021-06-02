@@ -3,7 +3,8 @@ const express = require('express'),
   session = require('express-session'),
   cors = require('cors'),
   errorhandler = require('errorhandler'),
-  mongoose = require('mongoose');
+  mongoose = require('mongoose'),
+  passport = require('passport');
 
 require('dotenv').config();
 
@@ -48,6 +49,7 @@ require('./models/Comment');
 require('./models/Task');
 require('./models/Queue');
 require('./models/Board');
+require('./config/passport');
 
 app.use(require('./routes'));
 
