@@ -16,4 +16,11 @@ const BoardSchema = new mongoose.Schema({
   }]
 }, { timestamps: true });
 
+BoardSchema.methods.toShortJSON = function() {
+  return {
+    id: this._id,
+    title: this.title
+  }
+};
+
 mongoose.model('Board', BoardSchema);

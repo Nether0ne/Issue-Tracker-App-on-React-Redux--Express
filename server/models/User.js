@@ -18,16 +18,16 @@ const UserSchema = new mongoose.Schema({
 
 UserSchema.plugin(uniqueValidator, { message: 'is already taken' });
 
-UserSchema.methods.validPassword = (password) => {
+UserSchema.methods.validPassword = function(password) {
   return this.password === crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UserSchema.methods.setPassword = (password) => {
+UserSchema.methods.setPassword = function(password) {
   this.salt = crypto.randomBytes(16).toString('hex');
   this.password = crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
 };
 
-UserSchema.methods.generateJWT = () => {
+UserSchema.methods.generateJWT = function() {
   const today = new Date();
   const expire = new Date(today);
   expire.setDate(today.getDate() + 60);
@@ -39,7 +39,7 @@ UserSchema.methods.generateJWT = () => {
   }, process.env.SECRET);
 };
 
-UserSchema.methods.toAuthJSON = () => {
+UserSchema.methods.toAuthJSON = function() {
   return {
     id: this._id,
     email: this.email,
@@ -47,7 +47,7 @@ UserSchema.methods.toAuthJSON = () => {
   }
 };
 
-UserSchema.methods.toProfileJSONFor = () => {
+UserSchema.methods.toProfileJSONFor = function() {
   return {
     email: this.email,
     createdAt: this.createdAt

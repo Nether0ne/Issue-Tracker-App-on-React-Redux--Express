@@ -10,8 +10,11 @@
     "start": "cd server && node server.js",
     "server": "cd server && npm run server",
     "client": "npm start --prefix client",
-    "dev": "npm run server && npm run client"
+    "dev": "run-p server client"
   },
   "author": "Yan Stoyanov",
-  "license": "MIT"
+  "license": "MIT",
+  "dependencies": {
+    "npm-run-all": "^4.1.5"
+  }
 }

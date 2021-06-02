@@ -7,6 +7,17 @@ const Comment = mongoose.model('Comment');
 const Activity = mongoose.model('Activity');
 const ActivityService = require('../../services/activityService');
 
+router.get('/', (req, res, next) => {
+  Board.find().then((boards) => {
+    if (!boards) { return 0; } // todo 401
+
+    res.json({
+      success: true,
+      boards: boards.map((b) => { return b.toShortJSON(); })
+    })
+  }).catch(next);
+});
+
 router.get('/:id', (req, res, next) => {
   Board.findById(req.params.id)
     .populate({
