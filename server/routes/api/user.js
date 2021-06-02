@@ -5,52 +5,52 @@ const passport = require('passport');
 const auth = require('../auth');
 
 router.get('/:id', auth.required, (req, res, next) => {
-    User.findById(req.params.id).then((user) => {
-      if(!user){ return res.sendStatus(401); }
-  
-      return res.json({user: user.toAuthJSON()});
-    }).catch(next);
-  });
-  
+  User.findById(req.params.id).then((user) => {
+    if (!user) { return res.sendStatus(401); }
+
+    return res.json({ user: user.toAuthJSON() });
+  }).catch(next);
+});
+
 router.put('/', auth.required, (req, res, next) => {
   User.findById(req.body.id).then((user) => {
-    if(!user){ return res.sendStatus(401); }
+    if (!user) { return res.sendStatus(401); }
 
     // only update fields that were actually passed...
-    if(typeof req.body.user.email !== 'undefined'){
+    if (typeof req.body.user.email !== 'undefined') {
       user.username = req.body.user.username;
     }
-    if(typeof req.body.user.password !== 'undefined'){
+    if (typeof req.body.user.password !== 'undefined') {
       user.setPassword(req.body.user.password);
     }
-  
+
     return user.save().then(() => {
-      return res.json({user: user.toAuthJSON()});
+      return res.json({ user: user.toAuthJSON() });
     });
   }).catch(next);
 });
 
 router.post('/login', (req, res, next) => {
-  if(!req.body.user.email){
-    return res.status(422).json({errors: {email: 'can\'t be blank'}});
+  if (!req.body.user.email) {
+    return res.status(422).json({ errors: { email: 'can\'t be blank' } });
   }
 
-  if(!req.body.user.password){
-    return res.status(422).json({errors: {password: 'can\'t be blank'}});
+  if (!req.body.user.password) {
+    return res.status(422).json({ errors: { password: 'can\'t be blank' } });
   }
 
-  passport.authenticate('local', {session: false}, (err, user, info) => {
-    if(err){ return next(err); }
+  passport.authenticate('local', { session: false }, (err, user, info) => {
+    if (err) { return next(err); }
 
-    if(user){
+    if (user) {
       user.token = user.generateJWT();
-      return res.json({user: user.toAuthJSON()});
+      return res.json({ user: user.toAuthJSON() });
     } else {
       return res.status(422).json(info);
     }
   })(req, res, next);
 });
-  
+
 router.post('/register', (req, res, next) => {
   let user = new User();
 
@@ -59,8 +59,8 @@ router.post('/register', (req, res, next) => {
   user.setPassword(req.body.user.password);
 
   user.save().then(() => {
-    return res.json({user: user.toAuthJSON()});
+    return res.json({ user: user.toAuthJSON() });
   }).catch(next);
 });
-  
-  module.exports = router;
+
+module.exports = router;

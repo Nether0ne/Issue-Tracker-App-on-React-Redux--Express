@@ -12,16 +12,16 @@ router.get('/:id', (req, res, next) => {
     .populate({
       path: 'queues',
       populate: {
-        path : 'tasks'
+        path: 'tasks'
       }
     })
     .populate('activities')
-    .then((board) => { 
-      if(!board){ return res.sendStatus(401); }
+    .then((board) => {
+      if (!board) { return res.sendStatus(401); }
 
       res.json({
-        success : true,
-        board : board.toJSON()
+        success: true,
+        board: board.toJSON()
       });
     }).catch(next);
 });
@@ -33,12 +33,12 @@ router.post('/', (req, res, next) => {
 
   const queue = new Queue();
   queue.title = 'Test';
-  
+
   const task = new Task();
   task.title = 'Welcome!';
   task.description = 'Let\'s start!';
   task.save();
-  
+
   queue.tasks.push(task);
   queue.save();
   board.queues.push(queue);
@@ -47,22 +47,21 @@ router.post('/', (req, res, next) => {
     const activity = new ActivityService(
       board._id,
       'board',
-      board.createdBy,
-      {
-        type : 'create'
+      board.createdBy, {
+        type: 'create'
       }
     );
-    
+
     activity.log().then(() => {
       res.json({
-        success : true,
-        board : board.populate({
-          path : 'queues',
-          populate : {
-            path : 'tasks'
-          }
-        })
-        .toJSON()
+        success: true,
+        board: board.populate({
+            path: 'queues',
+            populate: {
+              path: 'tasks'
+            }
+          })
+          .toJSON()
       })
     });
   }).catch(next);
@@ -73,7 +72,7 @@ router.put('/', (req, res, next) => {
 
   Board.findById(params.board.id).then((board) => {
     if (!board) {
-      return res.sendStatus(401); 
+      return res.sendStatus(401);
     }
 
     if (typeof params.board.title !== 'undefined') {
@@ -83,23 +82,23 @@ router.put('/', (req, res, next) => {
         'board',
         board.createdBy, // TODO change to current user
         {
-          type : 'update'
+          type: 'update'
         }
       );
       activity.log();
     }
-    
-    board.save().then((board) => { 
+
+    board.save().then((board) => {
       res.json({
-        success : true,
-        board : board.populate({
-          path : 'queues',
-          populate : {
-            path : 'tasks'
-          }
-        })
-        .populate('activities')
-        .toJSON()
+        success: true,
+        board: board.populate({
+            path: 'queues',
+            populate: {
+              path: 'tasks'
+            }
+          })
+          .populate('activities')
+          .toJSON()
       });
     });
   }).catch(next);
@@ -107,18 +106,18 @@ router.put('/', (req, res, next) => {
 
 router.delete('/', (req, res, next) => {
   Board.findById(req.body.board.id).then((board) => {
-    return new Promise(async (resolve, reject) => {
+    return new Promise(async(resolve, reject) => {
       if (!board) {} // todo return error
-      await Activity.find({ _id : { $in : board.activities }}).then((activities) => {
+      await Activity.find({ _id: { $in: board.activities } }).then((activities) => {
         activities.forEach((a) => {
           a.delete();
         });
-      }).then(async () => {
-        await Queue.find({ _id : { $in : board.queues }}).then((queues) => {
-          queues.forEach(async (q) => {
-            await Task.find({ _id : { $in : q.tasks }}).then((tasks) => {
-              tasks.forEach(async (t) => {
-                await Comment.find({ _id : { $in : t.comments }}).then( (comments) => {
+      }).then(async() => {
+        await Queue.find({ _id: { $in: board.queues } }).then((queues) => {
+          queues.forEach(async(q) => {
+            await Task.find({ _id: { $in: q.tasks } }).then((tasks) => {
+              tasks.forEach(async(t) => {
+                await Comment.find({ _id: { $in: t.comments } }).then((comments) => {
                   comments.forEach((c) => {
                     t.comments.pull(c.id);
                     c.delete();
@@ -127,7 +126,7 @@ router.delete('/', (req, res, next) => {
                   q.tasks.pull(t.id);
                   t.delete();
                 });
-              });          
+              });
             }).then(() => {
               board.queues.pull(q.id);
               q.delete();
@@ -135,14 +134,14 @@ router.delete('/', (req, res, next) => {
           });
         });
       })
-      
+
       return resolve(board);
     });
   }).then((board) => {
     return board.delete();
   }).then((result) => {
     res.json({
-      success : !!result
+      success: !!result
     })
   }).catch(next);
 });

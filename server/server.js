@@ -7,7 +7,7 @@ const express = require('express'),
 
 require('dotenv').config();
 
-  var isProduction = process.env.NODE_ENV === 'production';
+var isProduction = process.env.NODE_ENV === 'production';
 
 // Create global app object
 var app = express();
@@ -22,7 +22,7 @@ app.use(bodyParser.json());
 app.use(require('method-override')());
 app.use(express.static(__dirname + '/public'));
 
-app.use(session({ secret: process.env.secret, cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false  }));
+app.use(session({ secret: process.env.secret, cookie: { maxAge: 60000 }, resave: false, saveUninitialized: false }));
 
 if (!isProduction) {
   app.use(errorhandler());
@@ -30,13 +30,13 @@ if (!isProduction) {
 
 mongoose.Promise = global.Promise;
 
-if (isProduction){
+if (isProduction) {
   mongoose.connect(process.env.MONGODB_URI);
 } else {
   mongoose.connect('mongodb://127.0.0.1/' + process.env.db_name, {
-    useNewUrlParser: true, 
-    useUnifiedTopology: true, 
-    user: process.env.db_user, 
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    user: process.env.db_user,
     pass: process.env.db_pass
   });
   mongoose.set('debug', true);
@@ -68,10 +68,12 @@ if (!isProduction) {
 
     res.status(err.status || 500);
 
-    res.json({'errors': {
-      message: err.message,
-      error: err
-    }});
+    res.json({
+      'errors': {
+        message: err.message,
+        error: err
+      }
+    });
   });
 }
 
@@ -79,13 +81,15 @@ if (!isProduction) {
 // no stacktraces leaked to user
 app.use(function(err, req, res, next) {
   res.status(err.status || 500);
-  res.json({'errors': {
-    message: err.message,
-    error: {}
-  }});
+  res.json({
+    'errors': {
+      message: err.message,
+      error: {}
+    }
+  });
 });
 
 // finally, let's start our server...
-var server = app.listen( process.env.PORT || 3000, function(){
+var server = app.listen(process.env.PORT || 3000, function() {
   console.log('Listening on port ' + server.address().port);
 });

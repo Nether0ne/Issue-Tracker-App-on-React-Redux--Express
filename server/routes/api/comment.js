@@ -6,10 +6,10 @@ const ActivityService = require('../../services/activityService');
 
 router.get('/:taskId', (req, res, next) => {
   Task.findById(req.params.taskId).then((task) => {
-    if (!task) { } // todo 401
+    if (!task) {} // todo 401
 
     Comment.find({
-      '_id' : { $in : task.comments }
+      '_id': { $in: task.comments }
     }).then((comments) => {
       if (!comment) { return 0; } // todo 401
 
@@ -22,38 +22,37 @@ router.get('/:taskId', (req, res, next) => {
 
 router.post('/', (req, res, next) => {
   Task.findById(req.body.task.id).then((task) => {
-    if (!task) { } // todo 401
+    if (!task) {} // todo 401
 
     const comment = new Comment();
     comment.createdBy = '60b5112e26cad05568339c57'; // TEMP userID
     comment.description = req.body.comment.description;
-    
+
     task.comments.push(comment);
     task.save();
-        
+
     comment.save().then((comment) => {
       console.log(comment);
       const activity = new ActivityService(
         comment._id,
         'comment',
-        comment.createdBy,
-        {
-          type : 'create'
+        comment.createdBy, {
+          type: 'create'
         }
       );
-      
+
       activity.log().then(() => {
         res.json({
-          success : true,
-          task : task.toJSON()
+          success: true,
+          task: task.toJSON()
         });
       });
 
       res.json({
-        success : true,
-        comments : comment.toJSON()
+        success: true,
+        comments: comment.toJSON()
       });
-    });    
+    });
   }).catch(next);
 });
 

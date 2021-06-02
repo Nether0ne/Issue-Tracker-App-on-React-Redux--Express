@@ -5,18 +5,18 @@ const jwt = require('jsonwebtoken');
 
 const UserSchema = new mongoose.Schema({
   email: {
-    type: String, 
-    lowercase: true, 
-    unique: true, 
-    required: [true, "can't be blank"], 
-    match: [/\S+@\S+\.\S+/, 'is invalid'], 
+    type: String,
+    lowercase: true,
+    unique: true,
+    required: [true, "can't be blank"],
+    match: [/\S+@\S+\.\S+/, 'is invalid'],
     index: true
   },
   password: String,
   salt: String
-}, {timestamps: true});
+}, { timestamps: true });
 
-UserSchema.plugin(uniqueValidator, {message: 'is already taken'});
+UserSchema.plugin(uniqueValidator, { message: 'is already taken' });
 
 UserSchema.methods.validPassword = (password) => {
   return this.password === crypto.pbkdf2Sync(password, this.salt, 10000, 512, 'sha512').toString('hex');
