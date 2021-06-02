@@ -5,29 +5,13 @@
   "main": "server.js",
   "scripts": {
     "client-install": "cd client && npm install",
-    "start": "node server/server.js",
-    "server": "nodemon server/server.js",
+    "server-install": "cd server && npm install",
+    "install": "npm run client-install && npm run server-install",
+    "start": "cd server && node server.js",
+    "server": "cd server && npm run server",
     "client": "npm start --prefix client",
-    "dev": "concurrently \"npm run server\" \"npm run client\""
+    "dev": "npm run server && npm run client"
   },
   "author": "Yan Stoyanov",
-  "license": "MIT",
-  "dependencies": {
-    "body-parser": "^1.19.0",
-    "concurrently": "^4.1.1",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "dotenv": "^10.0.0",
-    "errorhandler": "^1.5.1",
-    "express": "^4.17.1",
-    "express-jwt": "^6.0.0",
-    "express-session": "^1.17.2",
-    "jsonwebtoken": "^8.5.1",
-    "method-override": "^3.0.0",
-    "mongoose": "^5.12.12",
-    "mongoose-unique-validator": "^2.0.3",
-    "morgan": "^1.10.0",
-    "nodemon": "^1.19.1",
-    "passport": "^0.4.1"
-  }
+  "license": "MIT"
 }
