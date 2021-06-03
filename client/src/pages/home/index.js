@@ -2,57 +2,57 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 
-import { userActions } from '../../actions';
+import { boardActions } from '../../actions';
 
 class HomePage extends React.Component {
-    // componentDidMount() {
-    //     this.props.getUsers();
-    // }
+  constructor(props) {
+    super(props);
+    this.props = props;
+  }
 
-    // handleDeleteUser(id) {
-    //     return (e) => this.props.deleteUser(id);
-    // }
+  componentDidMount() {
+    this.props.getBoards();
+  }
 
-    render() {
-        const { user, users } = this.props;
-        return (
-            <div className="col-md-6 col-md-offset-3">
-                Hello!
-                {/* <p>You're logged in with React!!</p>
-                <h3>All registered users:</h3>
-                {users.loading && <em>Loading users...</em>}
-                {users.error && <span className="text-danger">ERROR: {users.error}</span>}
-                {users.items &&
-                    <ul>
-                        {users.items.map((user, index) =>
-                            <li key={user.id}>
-                                {user.firstName + ' ' + user.lastName}
-                                {
-                                    user.deleting ? <em> - Deleting...</em>
-                                    : user.deleteError ? <span className="text-danger"> - ERROR: {user.deleteError}</span>
-                                    : <span> - <a onClick={this.handleDeleteUser(user.id)}>Delete</a></span>
-                                }
-                            </li>
-                        )}
-                    </ul>
-                }
-                <p>
-                    <Link to="/login">Logout</Link>
-                </p> */}
-            </div>
-        );
-    }
+  // handleDeleteUser(id) {
+  //     return (e) => this.props.deleteUser(id);
+  // }
+
+  render() {
+    console.log(this.props.board);
+    const { loading, success, boards } = this.props.board;
+    return (
+      <div className="col-md-6 col-md-offset-3">
+        <h3>All boards:</h3>
+        {loading && <em>Loading boards...</em>}
+        {!success && <span className="text-danger">Error loading boards!</span>}
+        <ul>
+          {success &&
+            boards.map((board, index) =>
+              <li key={board.id}>
+                {board.title}
+              </li>
+            )
+          }
+          <li key="new">
+            New board
+          </li>
+        </ul>
+        <p>
+          <Link to="/login">Logout</Link>
+        </p>
+      </div>
+    );
+  }
 }
 
 function mapState(state) {
-    const { users, authentication } = state;
-    const { user } = authentication;
-    return { user, users };
+  const { board } = state;
+  return { board };
 }
 
 const actionCreators = {
-    getUsers: userActions.getAll,
-    deleteUser: userActions.delete
+  getBoards: boardActions.getBoards,
 }
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);
