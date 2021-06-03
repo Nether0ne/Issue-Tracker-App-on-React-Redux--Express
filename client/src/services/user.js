@@ -16,7 +16,6 @@ function login(email, password) {
             password: password 
         }})
     };
-    console.log(1);
     return fetch(`/api/user/login`, requestOptions)
         .then(handleResponse)
         .then(user => {

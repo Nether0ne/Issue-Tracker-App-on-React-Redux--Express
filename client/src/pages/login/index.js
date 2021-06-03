@@ -39,17 +39,17 @@ class LoginPage extends React.Component {
 
     render() {
         const { loggingIn } = this.props;
-        const { username, password, submitted } = this.state;
+        const { email, password, submitted } = this.state;
         return (
             <div className="container vertical-center">
                 <div className="col-md-6 col-md-offset-3">
                     <h2>Login</h2>
                     <form name="form" onSubmit={this.handleSubmit}>
-                        <div className={'form-group' + (submitted && !username ? ' has-error' : '')}>
-                            <label htmlFor="username">Username</label>
-                            <input type="text" className="form-control" name="username" value={username} onChange={this.handleChange} />
-                            {submitted && !username &&
-                                <div className="help-block">Username is required</div>
+                        <div className={'form-group' + (submitted && !email ? ' has-error' : '')}>
+                            <label htmlFor="username">Email</label>
+                            <input type="text" className="form-control" name="email" value={email} onChange={this.handleChange} />
+                            {submitted && !email &&
+                                <div className="help-block">Email is required</div>
                             }
                         </div>
                         <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
