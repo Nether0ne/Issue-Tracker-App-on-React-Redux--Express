@@ -6,7 +6,12 @@ const auth = require('../auth');
 
 router.get('/:id', auth.required, (req, res, next) => {
   User.findById(req.params.id).then((user) => {
-    if (!user) { return res.sendStatus(401); }
+    if (!user) { 
+      return res.status(401).json({
+        success: false,
+        error: 'User not found!'
+      }); 
+    }
 
     return res.json({ user: user.toAuthJSON() });
   }).catch(next);
@@ -14,7 +19,12 @@ router.get('/:id', auth.required, (req, res, next) => {
 
 router.put('/', auth.required, (req, res, next) => {
   User.findById(req.body.id).then((user) => {
-    if (!user) { return res.sendStatus(401); }
+    if (!user) { 
+      return res.status(401).json({
+        success: false,
+        error: 'User not found!'
+      }); 
+    }
 
     // only update fields that were actually passed...
     if (typeof req.body.user.email !== 'undefined') {
@@ -25,7 +35,10 @@ router.put('/', auth.required, (req, res, next) => {
     }
 
     return user.save().then(() => {
-      return res.json({ user: user.toAuthJSON() });
+      return res.json({ 
+        success: true,
+        user: user.toAuthJSON() 
+      });
     });
   }).catch(next);
 });
@@ -44,9 +57,15 @@ router.post('/login', (req, res, next) => {
 
     if (user) {
       user.token = user.generateJWT();
-      return res.json({ user: user.toAuthJSON() });
+      return res.json({ 
+        success: true,
+        user: user.toAuthJSON() 
+      });
     } else {
-      return res.status(422).json(info);
+      return res.status(401).json({
+        success: false,
+        error: 'User not found!'
+      });
     }
   })(req, res, next);
 });
@@ -57,7 +76,10 @@ router.post('/register', (req, res, next) => {
   user.setPassword(req.body.user.password);
 
   user.save().then(() => {
-    return res.json({ user: user.toAuthJSON() });
+    return res.json({ 
+      success: true,
+      user: user.toAuthJSON() 
+    });
   }).catch(next);
 });
 
