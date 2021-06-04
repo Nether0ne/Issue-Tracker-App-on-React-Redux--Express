@@ -77,12 +77,12 @@ class RegisterPage extends React.Component {
               {registering
                 ? <img src="" />
                 : 
-                <div className="flex justify-between">
-                  <div>
-                    <button className="btn btn-success">Register</button>
+                <div className="flex gap-24">
+                  <div className="flex-1">
+                    <button className="btn btn-success w-100">Register</button>
                   </div>
-                  <div>
-                    <Link to="/login" className="btn btn-secondary">Cancel</Link>
+                  <div className="flex-1">
+                    <Link to="/login" className="btn btn-secondary w-100">Cancel</Link>
                   </div>
                 </div>
               }

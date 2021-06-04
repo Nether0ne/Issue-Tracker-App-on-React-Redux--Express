@@ -70,12 +70,12 @@ class LoginPage extends React.Component {
               {loggingIn
                 ? <img src="" />
                 : 
-                <div className="flex justify-between">
-                  <div>
-                    <button className="btn btn-success">Login</button>
+                <div className="flex gap-24">
+                  <div className="flex-1">
+                    <button className="btn btn-success w-100">Login</button>
                   </div>
-                  <div>
-                    <Link to="/register" className="btn btn-secondary">Register</Link>
+                  <div className="flex-1">
+                    <Link to="/register" className="btn btn-secondary w-100">Register</Link>
                   </div>
                 </div>
               }
