@@ -43,9 +43,9 @@ class LoginPage extends React.Component {
         <h2 className="text-center font-bold uppercase mb-8 text-2xl">Login</h2>
         
         <form name="form" onSubmit={this.handleSubmit}>
-          <div class="flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
             <div>
-              <label for="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label">Email</label>
               <div className="input-group has-validation">
                 <input type="text" className={'form-control ' + (submitted && !/.+@.+\..+/.test(email) ? 'is-invalid' : '')} 
                   name="email" value={email} onChange={this.handleChange} />
@@ -56,7 +56,7 @@ class LoginPage extends React.Component {
             </div>
             
             <div>
-              <label for="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">Password</label>
               <div className="input-group has-validation">
                 <input type="password" className={'form-control ' + (submitted && !password ? 'is-invalid' : '')} 
                   name="password" value={password} onChange={this.handleChange} />

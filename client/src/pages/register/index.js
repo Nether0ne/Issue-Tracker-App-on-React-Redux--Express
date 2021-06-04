@@ -52,7 +52,7 @@ class RegisterPage extends React.Component {
         <form name="form" onSubmit={this.handleSubmit}>
           <div className="flex flex-col gap-3">
             <div>
-              <label for="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label">Email</label>
               <div className="input-group has-validation">
                 <input type="text" className={'form-control ' + (submitted && !/.+@.+\..+/.test(email) ? 'is-invalid' : '')} 
                   name="email" value={email} onChange={this.handleChange} />
@@ -63,7 +63,7 @@ class RegisterPage extends React.Component {
             </div>
             
             <div>
-              <label for="password" className="form-label">Password</label>
+              <label htmlFor="password" className="form-label">Password</label>
               <div className="input-group has-validation">
                 <input type="password" className={'form-control ' + (submitted && !password ? 'is-invalid' : '')} 
                   name="password" value={password} onChange={this.handleChange} />
