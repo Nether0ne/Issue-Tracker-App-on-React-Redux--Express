@@ -44,33 +44,49 @@ class RegisterPage extends React.Component {
   render() {
     const { registering } = this.props;
     const { user, submitted } = this.state;
+    const { email, password } = user;
     return (
-      <div className="col-md-6 col-md-offset-3">
-        <h2>Register</h2>
+      <div className="self-center w-80">
+        <h2 className="text-center font-bold uppercase mb-8 text-2xl">Register</h2>
+        
         <form name="form" onSubmit={this.handleSubmit}>
-          <div className={'form-group' + (submitted && (!user.email || !/.+@.+\..+/.test(user.email)) ? ' has-error' : '')}>
-            <label htmlFor="username">Email</label>
-            <input type="text" className="form-control" name="email" value={user.email} onChange={this.handleChange} />
-            {submitted && !user.email &&
-              <div className="help-block">Email is required</div>
-            }
-            {submitted && !/.+@.+\..+/.test(user.email) &&
-              <div className="help-block">Invalid email</div>
-            }
-          </div>
-          <div className={'form-group' + (submitted && !user.password ? ' has-error' : '')}>
-            <label htmlFor="password">Password</label>
-            <input type="password" className="form-control" name="password" value={user.password} onChange={this.handleChange} />
-            {submitted && !user.password &&
-              <div className="help-block">Password is required</div>
-            }
-          </div>
-          <div className="form-group">
-            <button className="btn btn-primary">Register</button>
-            {registering && 
-              <img src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
-            }
-            <Link to="/login" className="btn btn-link">Cancel</Link>
+          <div className="flex flex-col gap-3">
+            <div>
+              <label for="email" className="form-label">Email</label>
+              <div className="input-group has-validation">
+                <input type="text" className={'form-control ' + (submitted && !/.+@.+\..+/.test(email) ? 'is-invalid' : '')} 
+                  name="email" value={email} onChange={this.handleChange} />
+                <div className="invalid-feedback">
+                  Invalid email
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <label for="password" className="form-label">Password</label>
+              <div className="input-group has-validation">
+                <input type="password" className={'form-control ' + (submitted && !password ? 'is-invalid' : '')} 
+                  name="password" value={password} onChange={this.handleChange} />
+                <div className="invalid-feedback">
+                  Password is required
+                </div>
+              </div>
+            </div>
+
+            <div>
+              {registering
+                ? <img src="" />
+                : 
+                <div className="flex justify-between">
+                  <div>
+                    <button className="btn btn-success">Register</button>
+                  </div>
+                  <div>
+                    <Link to="/login" className="btn btn-secondary">Cancel</Link>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </form>
       </div>

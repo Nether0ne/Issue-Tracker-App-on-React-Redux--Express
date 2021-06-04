@@ -9,11 +9,8 @@ class LoginPage extends React.Component {
   constructor(props) {
     super(props);
 
-    // reset login status
-    //this.props.logout();
-
     this.state = {
-      username: '',
+      email: '',
       password: '',
       submitted: false
     };
@@ -40,33 +37,49 @@ class LoginPage extends React.Component {
   render() {
     const { loggingIn } = this.props;
     const { email, password, submitted } = this.state;
+    console.log(this.state)
     return (
-      <div className="col-md-6 col-md-offset-3">
-        <h2>Login</h2>
+      <div className="self-center w-80">
+        <h2 className="text-center font-bold uppercase mb-8 text-2xl">Login</h2>
+        
         <form name="form" onSubmit={this.handleSubmit}>
-          <div className={'form-group' + (submitted && (!this.email || !/.+@.+\..+/.test(this.email)) ? ' has-error' : '')}>
-            <label htmlFor="email">Email</label>
-            <input type="text" className="form-control" name="email" value={this.email} onChange={this.handleChange} />
-            {submitted && !email &&
-              <div className="help-block">Email is required</div>
-            }
-            {submitted && !!/.+@.+\..+/.test(this.email) &&
-              <div className="help-block">Invalid email</div>
-            }
-          </div>
-          <div className={'form-group' + (submitted && !password ? ' has-error' : '')}>
-            <label htmlFor="password">Password</label>
-            <input type="password" className="form-control" name="password" value={this.password} onChange={this.handleChange} />
-            {submitted && !password &&
-              <div className="help-block">Password is required</div>
-            }
-          </div>
-          <div className="form-group">
-            <button className="btn btn-primary">Login</button>
-            {loggingIn &&
-              <img src="" />
-            }
-            <Link to="/register" className="btn btn-link">Register</Link>
+          <div class="flex flex-col gap-3">
+            <div>
+              <label for="email" className="form-label">Email</label>
+              <div className="input-group has-validation">
+                <input type="text" className={'form-control ' + (submitted && !/.+@.+\..+/.test(email) ? 'is-invalid' : '')} 
+                  name="email" value={email} onChange={this.handleChange} />
+                <div className="invalid-feedback">
+                  Invalid email
+                </div>
+              </div>
+            </div>
+            
+            <div>
+              <label for="password" className="form-label">Password</label>
+              <div className="input-group has-validation">
+                <input type="password" className={'form-control ' + (submitted && !password ? 'is-invalid' : '')} 
+                  name="password" value={password} onChange={this.handleChange} />
+                <div className="invalid-feedback">
+                  Password is required
+                </div>
+              </div>
+            </div>
+
+            <div>
+              {loggingIn
+                ? <img src="" />
+                : 
+                <div className="flex justify-between">
+                  <div>
+                    <button className="btn btn-success">Login</button>
+                  </div>
+                  <div>
+                    <Link to="/register" className="btn btn-secondary">Register</Link>
+                  </div>
+                </div>
+              }
+            </div>
           </div>
         </form>
       </div>

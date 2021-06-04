@@ -57,38 +57,26 @@ router.post('/login', (req, res, next) => {
 
     if (user) {
       user.token = user.generateJWT();
-      return res.json({ 
-        success: true,
-        user: user.toAuthJSON() 
-      });
+      return res.json(user.toAuthJSON());
     } else {
-      return res.status(401).json({
-        success: false,
-        error: 'User not found!'
-      });
+      return res.status(401).json({ error: 'User not found!' });
     }
   })(req, res, next);
 });
 
-router.post('/register', (req, res, next) => {
+router.get('/logout', (req, res, next) => {
+  req.logout()
+  return res.sendStatus(200);
+});
 
+router.post('/register', (req, res, next) => {
   User.find({email: req.body.user.email}).then((existingUser) => {
-    if (existingUser) {
-      res.status(401).json({
-        success: false,
-        error: 'User with this email is already registered!'
-      });
-    }
 
     let user = new User();
     user.email = req.body.user.email;
     user.setPassword(req.body.user.password);
-  
     user.save().then(() => {
-      return res.json({ 
-        success: true,
-        user: user.toAuthJSON() 
-      });
+      return res.json(user.toAuthJSON());
     })
   }).catch(next);
 });

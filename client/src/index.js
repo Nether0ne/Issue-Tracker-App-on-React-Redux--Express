@@ -1,13 +1,17 @@
 import React from 'react';
 import { render } from 'react-dom';
 import { Provider } from 'react-redux';
-
-import { store } from './helpers';
 import { App } from './App';
+import { Router} from 'react-router-dom';
+import './index.sass';
+import { store, history } from './helpers';
+
 
 render(
-    <Provider store={store}>
-        <App />
-    </Provider>,
-    document.getElementById('app')
+  <Provider store={store}>
+    <Router history={history}>
+      <App />
+    </Router>
+  </Provider>,
+  document.getElementById('app')
 );
