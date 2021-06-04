@@ -29,7 +29,7 @@ class HomePage extends React.Component {
         <div className="flex-col p-2">
           <h2 className="font-bold text-xl">            
             <svg className="h-6 w-6 icon text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
             </svg>
             Personal boards
           </h2>
@@ -37,9 +37,9 @@ class HomePage extends React.Component {
         {loading && <em>Loading boards...</em>}
         {!success && !loading && <span className="text-danger">Error loading boards!</span>}
         {success &&
-          <div class="flex flex-row self-left gap-4 text-white font-bold">
+          <div className="flex flex-row self-left gap-4 text-white font-bold">
             {boards.map((board, index) =>
-              <Link to={'/board/' + board.id}>
+              <Link to={'/board/' + board.id} key={board.id}>
               <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600">
                 <p className="">
                   {board.title}
@@ -47,7 +47,7 @@ class HomePage extends React.Component {
               </div>
               </Link> 
             )}
-            <Link to='/board/'>
+            <Link to='/board/' key="new">
               <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600">
                 New Board
               </div>
