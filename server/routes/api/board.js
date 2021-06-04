@@ -6,8 +6,9 @@ const Task = mongoose.model('Task');
 const Comment = mongoose.model('Comment');
 const Activity = mongoose.model('Activity');
 const ActivityService = require('../../services/activityService');
+const auth = require('../auth'); 
 
-router.get('/', (req, res, next) => {
+router.get('/', auth.required, (req, res, next) => {
   Board.find().then((boards) => {
     if (!boards) { return 0; } // todo 401
 
@@ -18,7 +19,7 @@ router.get('/', (req, res, next) => {
   }).catch(next);
 });
 
-router.get('/:id', (req, res, next) => {
+router.get('/:id', auth.required, (req, res, next) => {
   Board.findById(req.params.id)
     .populate({
       path: 'queues',
@@ -37,10 +38,10 @@ router.get('/:id', (req, res, next) => {
     }).catch(next);
 });
 
-router.post('/', (req, res, next) => {
+router.post('/', auth.required, (req, res, next) => {
   const board = new Board();
   board.title = req.body.board.title;
-  board.createdBy = '60b5112e26cad05568339c57'; // TEMP userID
+  board.createdBy = req.payload.id; // TEMP userID
 
   const queue = new Queue();
   queue.title = 'Test';
@@ -78,7 +79,7 @@ router.post('/', (req, res, next) => {
   }).catch(next);
 });
 
-router.put('/', (req, res, next) => {
+router.put('/', auth.required, (req, res, next) => {
   const params = req.body;
 
   Board.findById(params.board.id).then((board) => {
@@ -91,7 +92,7 @@ router.put('/', (req, res, next) => {
       const activity = new ActivityService(
         board._id,
         'board',
-        board.createdBy, // TODO change to current user
+        req.payload.id,
         {
           type: 'update'
         }
@@ -115,7 +116,7 @@ router.put('/', (req, res, next) => {
   }).catch(next);
 });
 
-router.delete('/', (req, res, next) => {
+router.delete('/', auth.required, (req, res, next) => {
   Board.findById(req.body.board.id).then((board) => {
     return new Promise(async(resolve, reject) => {
       if (!board) {} // todo return error

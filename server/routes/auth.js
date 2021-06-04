@@ -15,14 +15,14 @@ var auth = {
     secret: secret,
     userProperty: 'payload',
     getToken: getTokenFromHeader,
-    algorithms: ['RS256']
+    algorithms: ['sha1', 'RS256', 'HS256']
   }),
   optional: jwt({
     secret: secret,
     userProperty: 'payload',
     credentialsRequired: false,
     getToken: getTokenFromHeader,
-    algorithms: ['RS256']
+    algorithms: ['sha1', 'RS256', 'HS256']
   })
 };
 
