@@ -3,7 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from 'react-redux';
 
 import "./header.sass";
-import { userActions } from '../../_actions';
+import { userActions } from '../../../_actions';
 import Avatar from 'react-avatar';
 
 class Header extends React.Component {
@@ -35,7 +35,7 @@ class Header extends React.Component {
                 <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                   <li className="nav-item">
                     <Link to="/">
-                      <button className="btn text-white font-bold bg-blue-400">
+                      <button className="btn text-white font-bold bg-blue-400 hover:bg-indigo-500 hover:border hover:border-black">
                         <svg xmlns="http://www.w3.org/2000/svg" className="icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
                         </svg>
@@ -46,7 +46,7 @@ class Header extends React.Component {
                 </ul>
                 <div className="dropdown dropstart">
                   <a className="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Avatar classNameName="d-flex" name={user.email} size="45px" round="25px" color="darkgray" maxInitials={1} fgColor="black"/>
+                    <Avatar className="d-flex" name={user.email} size="45px" round="25px" color="darkgray" maxInitials={1} fgColor="black"/>
                   </a>
                   <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a className="dropdown-item" href="#">My profile</a></li> {/*TODO link to logged in user */}

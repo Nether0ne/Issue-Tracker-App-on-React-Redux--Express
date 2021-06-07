@@ -25,7 +25,7 @@ class HomePage extends React.Component {
     const { loading, success, boards } = board;
     
     return (
-      <div className="flex flex-wrap flex-col gap-2 self-center w-5/6 ">
+      <div className="flex flex-wrap flex-col gap-2 w-3/4 m-auto">
         <div className="flex-col p-2">
           <h2 className="font-bold text-xl">            
             <svg className="h-6 w-6 icon text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -38,7 +38,7 @@ class HomePage extends React.Component {
         {!success && !loading && <span className="text-danger">Error loading boards!</span>}
         {success &&
           <div className="flex flex-row self-left gap-4 text-white font-bold">
-            {boards.map((board, index) =>
+            {boards.map((board) =>
               <Link to={'/board/' + board.id} key={board.id}>
               <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600">
                 <p className="">

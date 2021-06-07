@@ -1,2 +1,2 @@
 export * from './privateRoute';
-export * from './header/';
+export * from './parts/';

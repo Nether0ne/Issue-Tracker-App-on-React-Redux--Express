@@ -46,7 +46,7 @@ class RegisterPage extends React.Component {
     const { user, submitted } = this.state;
     const { email, password } = user;
     return (
-      <div className="self-center w-80">
+      <div className="m-auto w-1/4">
         <h2 className="text-center font-bold uppercase mb-8 text-2xl">Register</h2>
         
         <form name="form" onSubmit={this.handleSubmit}>
