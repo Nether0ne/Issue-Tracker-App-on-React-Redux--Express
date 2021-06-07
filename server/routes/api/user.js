@@ -59,7 +59,13 @@ router.post('/login', (req, res, next) => {
       user.token = user.generateJWT();
       return res.json(user.toAuthJSON());
     } else {
-      return res.status(401).json({ error: 'User not found!' });
+      let errorStr = '';
+      
+      for (const [key, value] of Object.entries(info.errors)) {
+        errorStr += key + ' ' + value + '. ';
+      }
+
+      return res.status(401).json({ error: errorStr });
     }
   })(req, res, next);
 });

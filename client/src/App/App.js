@@ -3,32 +3,24 @@ import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
 import { history } from '../_helpers';
-import { alertActions } from '../_actions';
 import { Footer, Header } from '../_components';
 
 import { PrivateRoute } from '../_components';
 import { HomePage } from '../pages/home';
 import { LoginPage } from '../pages/login';
 import { RegisterPage } from '../pages/register';
+import { BoardPage } from '../pages/board';
+import { Alert } from '../_components/popup';
 
-class App extends React.Component {
+export class App extends React.Component {
   constructor(props) {
     super(props);
-
-    history.listen((location, action) => {
-      // clear alert on location change
-      this.props.clearAlerts();
-    });
-  }
-
-  dismissHandler() {
-    return (e) => this.props.clearAlerts();
   }
 
   render() {
-    const { alert } = this.props;
     return (
       <div id='page'>
+        <Alert />
         <div className="flex flex-col h-screen justify-between gap-4">                         
           <header>
             <Header/>
@@ -38,6 +30,7 @@ class App extends React.Component {
               <PrivateRoute exact path="/" component={HomePage} />
               <Route path="/login" component={LoginPage} />
               <Route path="/register" component={RegisterPage} />
+              <PrivateRoute path="/board/:id" component={BoardPage} />
               <Redirect from="*" to="/" />
             </Switch>
           </div>
@@ -48,16 +41,4 @@ class App extends React.Component {
       </div>      
     );
   }
-}
-
-function mapState(state) {
-  const { alert } = state;
-  return { alert };
-}
-
-const actionCreators = {
-  clearAlerts: alertActions.clear
 };
-
-const connectedApp = connect(mapState, actionCreators)(App);
-export { connectedApp as App };
