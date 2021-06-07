@@ -36,7 +36,7 @@ class HomePage extends React.Component {
         </div>
         {loading && <em>Loading boards...</em>}
         {!success && !loading && <span className="text-danger">Error loading boards!</span>}
-        {success &&
+        {success && boards &&
           <div className="flex flex-row self-left gap-4 text-white font-bold">
             {boards.map((board) =>
               <Link to={'/board/' + board.id} key={board.id}>

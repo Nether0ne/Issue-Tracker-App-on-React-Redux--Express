@@ -2,8 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import { boardActions } from '../../_actions';
-
-//import './home.sass';
+import { Queue } from '../../_components';
 
 class BoardPage extends React.Component {
   constructor(props) {
@@ -12,14 +11,29 @@ class BoardPage extends React.Component {
   }
 
   componentDidMount() {
-    //this.props.getBoards();
+    const boardId = this.props.match.params.id;
+    this.props.getBoard(boardId);
   }
 
   render() {
+    const { loading, success, board } = this.props.board;
     
     return (
       <div className="flex flex-wrap flex-col gap-2 w-3/4 m-auto">
-        Board  
+      {loading && <em>Loading boards...</em>}
+      {!loading && !success && <span className="text-danger">Error loading board!</span>}
+      {success && board &&
+        <div>
+          <div className="board-header">
+            <h3>{board.title}</h3>
+          </div>
+          <div className="flex">
+            {board.queues.map((queue) => 
+              <Queue queue={queue} />
+            )}
+          </div>
+        </div>
+      }
       </div>
     );
   }
@@ -32,7 +46,7 @@ function mapState(state) {
 };
 
 const actionCreators = {
-  getBoards: boardActions.getBoards,
+  getBoard: boardActions.getBoard
 };
 
 const connectedBoardPage = connect(mapState, actionCreators)(BoardPage);

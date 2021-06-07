@@ -1,7 +1,8 @@
 import { authHeader } from "../_helpers";
 
 export const boardService = {
-  getBoards
+  getBoards,
+  getBoard
 };
 
 function getBoards() {
@@ -15,6 +16,19 @@ function getBoards() {
     .then(response => {
       return response.boards;
     });
+}
+
+function getBoard(id) {
+  const requestOptions = {
+    method: "GET",
+    headers: authHeader()
+  };
+
+  return fetch('/api/board/' + id, requestOptions)
+  .then(handleResponse)
+  .then(response=> {
+    return response.board;
+  });
 }
 
 function handleResponse(response) {

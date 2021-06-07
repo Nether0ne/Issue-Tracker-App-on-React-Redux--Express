@@ -39,7 +39,7 @@ class LoginPage extends React.Component {
     const { email, password, submitted } = this.state;
     
     return (
-        <div className="m-auto w-1/4">
+        <div className="m-auto w-96">
           <h2 className="text-center font-bold uppercase mb-8 text-2xl">Login</h2>
           
           <form name="form" onSubmit={this.handleSubmit}>
@@ -68,7 +68,7 @@ class LoginPage extends React.Component {
 
               <div>
                 {loggingIn
-                  ? <img src="" />
+                  ? <img src="" /> // TODO loading
                   : 
                   <div className="flex gap-24">
                     <div className="flex-1">

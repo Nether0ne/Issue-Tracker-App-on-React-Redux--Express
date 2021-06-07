@@ -46,7 +46,7 @@ class RegisterPage extends React.Component {
     const { user, submitted } = this.state;
     const { email, password } = user;
     return (
-      <div className="m-auto w-1/4">
+      <div className="m-auto w-96">
         <h2 className="text-center font-bold uppercase mb-8 text-2xl">Register</h2>
         
         <form name="form" onSubmit={this.handleSubmit}>
@@ -75,7 +75,7 @@ class RegisterPage extends React.Component {
 
             <div>
               {registering
-                ? <img src="" />
+                ? <img src="" /> // TODO loading
                 : 
                 <div className="flex gap-24">
                   <div className="flex-1">

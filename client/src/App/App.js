@@ -1,8 +1,6 @@
 import React from 'react';
-import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import { history } from '../_helpers';
 import { Footer, Header } from '../_components';
 
 import { PrivateRoute } from '../_components';

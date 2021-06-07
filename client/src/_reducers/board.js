@@ -17,6 +17,21 @@ export function board(state = {}, action) {
         loading: false,
         success: false 
       };
+    case boardConstants.GET_BOARD_REQUEST:
+      return {
+        loading: true
+      }
+    case boardConstants.GET_BOARD_SUCCESS:
+      return {
+        loading: false,
+        success: true,
+        board: action.board
+      }
+    case boardConstants.GET_BOARD_FAILURE:
+      return {
+        loading: false,
+        success: false
+      }
     default:
       return state
   }
