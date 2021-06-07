@@ -1,5 +1,5 @@
-import { boardConstants } from '../constants';
-import { boardService } from '../services';
+import { boardConstants } from '../_constants';
+import { boardService } from '../_services';
 
 export const boardActions = {
   getBoards

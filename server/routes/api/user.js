@@ -71,13 +71,16 @@ router.get('/logout', (req, res, next) => {
 
 router.post('/register', (req, res, next) => {
   User.find({email: req.body.user.email}).then((existingUser) => {
-
-    let user = new User();
-    user.email = req.body.user.email;
-    user.setPassword(req.body.user.password);
-    user.save().then(() => {
-      return res.json(user.toAuthJSON());
-    })
+    if (existingUser.length === 0) {
+      let user = new User();
+      user.email = req.body.user.email;
+      user.setPassword(req.body.user.password);
+      user.save().then(() => {
+        return res.json(user.toAuthJSON());
+      });
+    } else {
+      return res.status(401).json({ error: 'User already registered!' });
+    }
   }).catch(next);
 });
 

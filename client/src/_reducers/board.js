@@ -1,4 +1,4 @@
-import { boardConstants } from '../constants';
+import { boardConstants } from '../_constants';
 
 export function board(state = {}, action) {
   switch (action.type) {

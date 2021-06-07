@@ -3,7 +3,7 @@ import { withRouter, Link } from "react-router-dom";
 import { connect } from 'react-redux';
 
 import "./header.sass";
-import { userActions } from '../../actions';
+import { userActions } from '../../_actions';
 import Avatar from 'react-avatar';
 
 class Header extends React.Component {

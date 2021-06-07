@@ -2,11 +2,11 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Route, Switch, Redirect } from 'react-router-dom';
 
-import { history } from '../helpers';
-import { alertActions } from '../actions';
-import { Header } from '../components';
+import { history } from '../_helpers';
+import { alertActions } from '../_actions';
+import { Header } from '../_components';
 
-import { PrivateRoute } from '../components';
+import { PrivateRoute } from '../_components';
 import { HomePage } from '../pages/home';
 import { LoginPage } from '../pages/login';
 import { RegisterPage } from '../pages/register';
