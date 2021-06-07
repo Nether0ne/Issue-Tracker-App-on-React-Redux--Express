@@ -21,9 +21,9 @@ class Alert extends React.Component {
   }
 
   render() {
-    const { alert } = this.props;
-    console.log(alert)
+    const { alert } = this.props;    
     const statusStyle = alert.type ? (alert.type === 'alert-danger' ? 'bg-red-100' : 'bg-green-100') : '';
+    
     return(
       <div className={'alert flex fixed top-16 w-screen z-50 ' + (alert.message ? 'display: block' : 'display: none')}>
         {alert.message && 

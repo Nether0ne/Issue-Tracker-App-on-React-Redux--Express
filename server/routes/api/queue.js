@@ -50,7 +50,7 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-  Queue.findById(req.body.queue.id).then((queue) => {
+  Queue.findById(req.body.queue.id).populate('tasks').then((queue) => {
     if (!queue) { return 0; } // todo 401
 
     if (typeof req.body.queue.title !== 'undefined') {
@@ -69,8 +69,8 @@ router.put('/', (req, res, next) => {
       res.json({
         success: true,
         queue: queue.populate('tasks')
-      })
-    })
+      });
+    });
   }).catch(next);
 });
 

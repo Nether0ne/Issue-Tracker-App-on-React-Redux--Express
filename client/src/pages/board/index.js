@@ -28,8 +28,8 @@ class BoardPage extends React.Component {
             <h3>{board.title}</h3>
           </div>
           <div className="flex">
-            {board.queues.map((queue) => 
-              <Queue queue={queue} />
+            {board.queues.map((queue, index) => 
+              <Queue queue={queue} key={index} />
             )}
           </div>
         </div>

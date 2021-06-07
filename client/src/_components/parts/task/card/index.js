@@ -6,6 +6,10 @@ export class TaskCard extends React.Component {
     this.props = props;
   }
 
+  shouldComponentUpdate(nextProps) {
+    return (this.props.task._id === nextProps.task._id);
+  }
+
   render() {
     const { task } = this.props;
 
