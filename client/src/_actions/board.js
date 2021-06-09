@@ -29,10 +29,10 @@ function getBoards() {
 }
 
 function getBoard(id) {
-  return dispatch => {
+  return async dispatch => {
     dispatch(request());
 
-    boardService.getBoard(id)
+    await boardService.getBoard(id)
     .then(
       board => {
         dispatch(success(board));

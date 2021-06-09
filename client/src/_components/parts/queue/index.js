@@ -18,8 +18,9 @@ class Queue extends React.Component {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {    
-    return (this.props.queue._id === nextProps.queue._id);
+  shouldComponentUpdate(nextProps) {
+    console.log(nextProps);
+    return (this.props.queue.index === nextProps.queue.index);
   }
 
   handleChange(e) {
@@ -34,27 +35,28 @@ class Queue extends React.Component {
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState( { editing: false } )
-
+    this.setState( { editing: false } );
     const { _id } = this.props.queue;
 
     if (this.props.queue.title !== this.state.title) {
       this.props.edit({
-        queue: {
-          id: _id,
-          title: this.state.title
-        }
+        position: this.props.index,
+        id: _id,
+        title: this.state.title
       });
-    }
+    }  
   }
 
   render() {
     const { queue } = this.props;
+    const { processing } = queue;
+    console.log(this);
     const { tasks } = queue;
     const { editing, title } = this.state;
     
     return(
       <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg" key={queue.id}>
+        {processing && <div>processing</div>}
         {editing ? 
           <form>
             <div>
@@ -70,24 +72,25 @@ class Queue extends React.Component {
           :
           <h4 className="font-bold" onDoubleClick={this.handleEdit}>{queue.title}</h4>
         }
-        <div className="flex flex-col mt-2">
-          {tasks.map((task, index) => 
-            <TaskCard task={task} key={index} />
-          )}
-        </div>
+        {!processing ?
+          <div className="flex flex-col mt-2">
+            {tasks.map((task, index) => 
+              <TaskCard task={task} key={index} />
+            )}
+          </div>
+        : ''}
       </div>
     )
   }
 };
 
-function mapState(state) {
-  const { queue } = state;
-  return queue;
-}
+const mapStateToProps = (state, ownProps) => ({
+  queue: state.queueList[ownProps.index],
+})
 
 const actionCreators = {
   edit: queueActions.edit
 }
 
-const connectedQueue = connect(mapState, actionCreators)(Queue);
+const connectedQueue = connect(mapStateToProps, actionCreators)(Queue);
 export { connectedQueue as Queue };

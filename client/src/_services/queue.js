@@ -1,14 +1,32 @@
 import { authHeader } from "../_helpers";
 
 export const queueService = {
-  edit
+  add,
+  edit,
+  del
 };
+
+function add(params) {
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader(),
+    body: JSON.stringify(params)
+  };
+
+  requestOptions.headers['Content-Type'] = 'application/json';
+
+  return fetch('/api/queue/', requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      return response.queue;
+  });
+}
 
 function edit(params) {
   const requestOptions = {
     method: 'PUT',
     headers: authHeader(),
-    body: JSON.stringify(params)
+    body: JSON.stringify({ queue : params })
   };
   
   requestOptions.headers['Content-Type'] = 'application/json';
@@ -19,6 +37,22 @@ function edit(params) {
       return response.queue;
   });
 };
+
+function del(params) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader(),
+    body: JSON.stringify(params)
+  };
+
+  requestOptions.headers['Content-Type'] = 'application/json';
+
+  return fetch('/api/queue/', requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      return response.queue;
+  });
+}
 
 function handleResponse(response) {
   return response.text().then(text => {

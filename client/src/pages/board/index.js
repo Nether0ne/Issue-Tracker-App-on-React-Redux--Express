@@ -1,8 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { boardActions } from '../../_actions';
+import { boardActions, queueActions } from '../../_actions';
 import { Queue } from '../../_components';
+import { queueConstants } from '../../_constants';
 
 class BoardPage extends React.Component {
   constructor(props) {
@@ -10,26 +11,36 @@ class BoardPage extends React.Component {
     this.props = props;
   }
 
-  componentDidMount() {
+  async componentDidMount() {
     const boardId = this.props.match.params.id;
-    this.props.getBoard(boardId);
+    await this.props.getBoard(boardId);
+
+    const { board } = this.props.board;
+    
+    if (board) {
+      this.props.initQueue();
+      board.queues.map((queue) => {
+        this.props.pushQueue(queue);
+      });
+    }
   }
 
   render() {
-    const { loading, success, board } = this.props.board;
+    const { loading, success, board} = this.props.board;
+    const { queueList } = this.props;
     
     return (
       <div className="flex flex-wrap flex-col gap-2 w-3/4 m-auto">
       {loading && <em>Loading boards...</em>}
       {!loading && !success && <span className="text-danger">Error loading board!</span>}
-      {success && board &&
+      {success && board && queueList &&
         <div>
           <div className="board-header">
             <h3>{board.title}</h3>
           </div>
           <div className="flex">
-            {board.queues.map((queue, index) => 
-              <Queue queue={queue} key={index} />
+            {queueList.map((queue, index) => 
+              <Queue queue={queue} key={index} index={index} />
             )}
           </div>
         </div>
@@ -40,13 +51,17 @@ class BoardPage extends React.Component {
 };
 
 function mapState(state) {
-  const { board, authentication } = state;
+  const { board, authentication, queueList } = state;
   const { user } = authentication;
-  return { board, user };
+  return { board, user, queueList };
 };
 
 const actionCreators = {
-  getBoard: boardActions.getBoard
+  getBoard: boardActions.getBoard,
+  pushQueue: queueActions.push,
+  popQueue: queueActions.pop,
+  getQueue: queueActions.get,
+  initQueue: queueActions.init
 };
 
 const connectedBoardPage = connect(mapState, actionCreators)(BoardPage);
