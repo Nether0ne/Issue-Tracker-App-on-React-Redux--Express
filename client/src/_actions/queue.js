@@ -104,11 +104,11 @@ function get(index) {
   };
 };
 
-function init() {
+function init(queues) {
   return dispatch => {
     dispatch({
       type: queueConstants.INIT_QUEUE,
-      queues: []
+      queues: queues
     });
   };
 };

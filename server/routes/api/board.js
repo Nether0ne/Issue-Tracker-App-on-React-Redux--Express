@@ -82,36 +82,46 @@ router.post('/', auth.required, (req, res, next) => {
 router.put('/', auth.required, (req, res, next) => {
   const params = req.body;
 
-  Board.findById(params.board.id).then((board) => {
+  Board.findById(params.board.id).populate({ path: 'queues' }).then(async (board) => {
     if (!board) {
-      return res.sendStatus(401);
+      return res.sendStatus(401); 
     }
 
     if (typeof params.board.title !== 'undefined') {
       board.title = req.body.board.title;
-      const activity = new ActivityService(
-        board._id,
-        'board',
-        req.payload.id,
-        {
-          type: 'update'
-        }
-      );
-      activity.log();
+    }
+
+    if (params.board.queue) {
+      let queue = Queue.findById(params.board.queue.id);
+      if (typeof queue.id === 'undefined') {
+        queue = new Queue();
+      }
+
+      if (typeof params.board.queue.title !== 'undefined') {
+        queue.title = params.board.queue.title;
+      }
+      
+      queue.save();
+      board.queues.push(queue);
     }
 
     board.save().then((board) => {
       res.json({
-        success: true,
-        board: board.populate({
-            path: 'queues',
-            populate: {
-              path: 'tasks'
-            }
-          })
-          .populate('activities')
-          .toJSON()
+        "board" : board.toJSON()
       });
+    });
+  }).catch(next);
+});
+
+router.delete('/queue', auth.required, (req, res, next) => {
+  Board.findById(req.body.board.id).populate('queues').then((board) => {
+    board.queues.pull(req.body.board.queue.id);
+    Queue.findOneAndDelete(req.body.board.queue.id);
+
+    board.save().then((board) => {
+      res.json({
+        board: board.toJSON()
+      })
     });
   }).catch(next);
 });

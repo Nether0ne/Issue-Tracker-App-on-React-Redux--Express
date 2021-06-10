@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { queueActions } from '../../../_actions';
+import { boardActions, queueActions } from '../../../_actions';
 import { TaskCard } from '../task';
 
 class Queue extends React.Component {
@@ -19,6 +19,7 @@ class Queue extends React.Component {
     this.handleEdit = this.handleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleDeleteQueue = this.handleDeleteQueue.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -38,6 +39,18 @@ class Queue extends React.Component {
     });
   }
 
+  handleDeleteQueue(e) {
+    e.preventDefault();
+    this.props.del({
+      board: {
+        id: this.props.board._id,
+        queue: {
+          id: this.props.queue._id
+        }
+      }
+    }).then(() => this.props.callback());
+  }
+
   handleSubmit(e) {
     e.preventDefault();
 
@@ -45,8 +58,6 @@ class Queue extends React.Component {
       ...this.state,
        editing: false 
     });
-
-    const { _id } = this.props.queue;
 
     if (this.props.queue.title !== this.state.title) {
       this.props.edit(this.state);
@@ -71,13 +82,27 @@ class Queue extends React.Component {
             </div>
           </form>
           :
-          <h4 className="font-bold" onDoubleClick={this.handleEdit}>{queue.title}</h4>
+          <div className="flex flex-row justify-between">
+            <h4 className="font-bold" onDoubleClick={this.handleEdit}>{queue.title}</h4>
+            <div className="dropdown">
+              <a className="nav-link p-0" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                </svg>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a className="dropdown-item" href="#" onClick={this.handleDeleteQueue}>Delete</a></li>
+              </ul>
+            </div>     
+          </div>
         }
-        <div className="flex flex-col mt-2">
-          {queue.tasks.map((task, index) => 
-            <TaskCard task={task} key={index} />
-          )}
-        </div>
+        {queue.tasks && queue.tasks.length > 0 &&
+          <div className="flex flex-col mt-2">
+            {queue.tasks.map((task, index) => 
+              <TaskCard task={task} key={index} />
+            )}
+          </div>
+        }
       </div>
     )
   }
@@ -85,10 +110,12 @@ class Queue extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
   queue: state.queueList[ownProps.index],
+  board: state.board
 })
 
 const actionCreators = {
-  edit: queueActions.edit
+  edit: queueActions.edit,
+  del: boardActions.deleteQueue
 }
 
 const connectedQueue = connect(mapStateToProps, actionCreators)(Queue);

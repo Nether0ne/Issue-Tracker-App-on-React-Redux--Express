@@ -22,13 +22,35 @@ export function board(state = {}, action) {
         loading: true
       }
     case boardConstants.GET_BOARD_SUCCESS:
-      return {
-        loading: false,
-        success: true,
-        board: action.board
-      }
+      return action.board
     case boardConstants.GET_BOARD_FAILURE:
       return {
+        loading: false,
+        success: false
+      }
+    case boardConstants.EDIT_BOARD_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case boardConstants.EDIT_BOARD_SUCCESS:
+      return action.board
+    case boardConstants.EDIT_BOARD_FAILURE:
+      return {
+        ...state,
+        loading: false,
+        success: false
+      }
+    case boardConstants.DELETE_QUEUE_REQUEST:
+      return {
+        ...state,
+        loading: true
+      }
+    case boardConstants.DELETE_QUEUE_SUCCESS:
+      return action.board
+    case boardConstants.DELETE_QUEUE_FAILURE:
+      return {
+        ...state,
         loading: false,
         success: false
       }

@@ -2,7 +2,9 @@ import { authHeader } from "../_helpers";
 
 export const boardService = {
   getBoards,
-  getBoard
+  getBoard,
+  editBoard,
+  deleteQueue
 };
 
 function getBoards() {
@@ -23,12 +25,44 @@ function getBoard(id) {
     method: "GET",
     headers: authHeader()
   };
-
+  
   return fetch('/api/board/' + id, requestOptions)
-  .then(handleResponse)
-  .then(response=> {
-    return response.board;
-  });
+    .then(handleResponse)
+    .then(response=> {
+      return response.board;
+    });
+}
+
+function editBoard(params) {
+  const requestOptions = {
+    method: "PUT",
+    headers: authHeader(),
+    body: JSON.stringify(params)
+  };
+  
+  requestOptions.headers['Content-Type'] = 'application/json';
+  
+  return fetch('/api/board/', requestOptions)
+    .then(handleResponse)
+    .then(response=> {
+      return response.board;
+    });
+}
+
+function deleteQueue(params) {
+  const requestOptions = {
+    method: "DELETE",
+    headers: authHeader(),
+    body: JSON.stringify(params)
+  };
+  console.log(requestOptions)
+  requestOptions.headers['Content-Type'] = 'application/json';
+
+  return fetch('/api/board/queue', requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      return response.board
+    });
 }
 
 function handleResponse(response) {
