@@ -8,10 +8,13 @@ class Queue extends React.Component {
     super(props);
     this.props = props;
 
-    this.state = {
+    this.state = this.props.queue;
+
+    this.state = {    
+      ...this.state,  
       editing: false,
       title: this.props.queue.title
-    };
+    }
     
     this.handleEdit = this.handleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
@@ -19,8 +22,7 @@ class Queue extends React.Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    console.log(nextProps);
-    return (this.props.queue.index === nextProps.queue.index);
+    return (this.props.queue._id === nextProps.queue._id);
   }
 
   handleChange(e) {
@@ -30,39 +32,38 @@ class Queue extends React.Component {
 
   handleEdit(e) {
     e.preventDefault();
-    this.setState( { editing: true } );
+    this.setState({ 
+      ...this.state,
+      editing: true 
+    });
   }
 
   handleSubmit(e) {
     e.preventDefault();
-    this.setState( { editing: false } );
+
+    this.setState({
+      ...this.state,
+       editing: false 
+    });
+
     const { _id } = this.props.queue;
 
     if (this.props.queue.title !== this.state.title) {
-      this.props.edit({
-        position: this.props.index,
-        id: _id,
-        title: this.state.title
-      });
+      this.props.edit(this.state);
     }  
   }
 
   render() {
-    const { queue } = this.props;
-    const { processing } = queue;
-    console.log(this);
-    const { tasks } = queue;
-    const { editing, title } = this.state;
+    const queue = this.state;
     
     return(
-      <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg" key={queue.id}>
-        {processing && <div>processing</div>}
-        {editing ? 
+      <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg">
+        {queue.editing ? 
           <form>
             <div>
               <div className="input-group has-validation">
-                <input type="text" className={'form-control ' + (editing && title.length === 0 ? 'is-invalid' : '')} 
-                  name="title" value={title} onChange={this.handleChange} onBlur={this.handleSubmit} />
+                <input type="text" className={'form-control ' + (queue.editing && queue.title.length === 0 ? 'is-invalid' : '')} 
+                  name="title" value={queue.title} onChange={this.handleChange} onBlur={this.handleSubmit} />
                 <div className="invalid-feedback">
                   No task title provided
                 </div>
@@ -72,13 +73,11 @@ class Queue extends React.Component {
           :
           <h4 className="font-bold" onDoubleClick={this.handleEdit}>{queue.title}</h4>
         }
-        {!processing ?
-          <div className="flex flex-col mt-2">
-            {tasks.map((task, index) => 
-              <TaskCard task={task} key={index} />
-            )}
-          </div>
-        : ''}
+        <div className="flex flex-col mt-2">
+          {queue.tasks.map((task, index) => 
+            <TaskCard task={task} key={index} />
+          )}
+        </div>
       </div>
     )
   }

@@ -4,13 +4,14 @@ export function queue(state = {}, action) {
   switch (action.type) {
     case queueConstants.EDIT_QUEUE_REQUEST:
       return { 
+        ...state,
         processing: true 
       };
     case queueConstants.EDIT_QUEUE_SUCCESS:
-      console.log(action)
       return action.queue;
     case queueConstants.EDIT_QUEUE_FAILURE:
       return { 
+        ...state,
         processing: false,
         success: false 
       };
