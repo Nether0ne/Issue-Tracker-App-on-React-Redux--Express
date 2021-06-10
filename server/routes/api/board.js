@@ -38,10 +38,11 @@ router.get('/:id', auth.required, (req, res, next) => {
     }).catch(next);
 });
 
-router.post('/', auth.required, (req, res, next) => {
+router.post('/', auth.required, async (req, res, next) => {
   const board = new Board();
-  board.title = req.body.board.title;
-  board.createdBy = req.payload.id; // TEMP userID
+  board.title = "Board #";
+  await Board.countDocuments({}, function (err, count) { board.title += count + 1; })
+  board.createdBy = req.payload.id;
 
   const queue = new Queue();
   queue.title = 'Test';
@@ -67,13 +68,7 @@ router.post('/', auth.required, (req, res, next) => {
     activity.log().then(() => {
       res.json({
         success: true,
-        board: board.populate({
-            path: 'queues',
-            populate: {
-              path: 'tasks'
-            }
-          })
-          .toJSON()
+        id: board._id
       })
     });
   }).catch(next);

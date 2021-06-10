@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 
 import { boardActions } from '../../_actions';
@@ -10,22 +10,42 @@ class HomePage extends React.Component {
   constructor(props) {
     super(props);
     this.props = props;
+
+    this.state = {
+      boards: {},
+      loading: true,
+      success: null
+    }
+
+    this.handleCreateBoard = this.handleCreateBoard.bind(this);
   }
 
   componentDidMount() {
-    this.props.getBoards();
+    this.props.getBoards().then(() => {
+      const { boards, loading, success } = this.props.board;
+      this.setState({
+        ...this.state,
+        boards: boards,
+        loading: loading,
+        success: success
+      })
+    })
   }
 
-  // handleDeleteUser(id) {
-  //     return (e) => this.props.deleteUser(id);
-  // }
+  handleCreateBoard() {
+    this.props.addBoard();
+  }
 
   render() {
-    const { board } = this.props;
-    const { loading, success, boards } = board;
-    
+    const { loading, success, boards} = this.state;
+    const { newBoard } = this.props.board; 
+
+    if (newBoard && newBoard.id) {
+      return (<Redirect to={`/board/${newBoard.id}`} />)
+    }
+
     return (
-      <div className="flex flex-wrap flex-col gap-2 w-3/4 m-auto">
+      <div className="flex flex-col gap-2 w-3/4 m-auto h-screen">
         <div className="flex-col p-2">
           <h2 className="font-bold text-xl">            
             <svg className="h-6 w-6 icon text-gray-500" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -37,7 +57,7 @@ class HomePage extends React.Component {
         {loading && <em>Loading boards...</em>}
         {!success && !loading && <span className="text-danger">Error loading boards!</span>}
         {success && boards &&
-          <div className="flex flex-row self-left gap-4 text-white font-bold">
+          <div className="flex flex-row flex-wrap self-left gap-4 text-white font-bold">
             {boards.map((board) =>
               <Link to={'/board/' + board.id} key={board.id}>
               <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600">
@@ -47,11 +67,11 @@ class HomePage extends React.Component {
               </div>
               </Link> 
             )}
-            <Link to='/board/' key="new">
-              <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600">
+            <a href="#">
+              <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600" onClick={this.handleCreateBoard}>
                 New Board
               </div>
-            </Link>
+            </a>            
           </div>
         }        
       </div>
@@ -67,6 +87,7 @@ function mapState(state) {
 
 const actionCreators = {
   getBoards: boardActions.getBoards,
+  addBoard: boardActions.addBoard
 }
 
 const connectedHomePage = connect(mapState, actionCreators)(HomePage);

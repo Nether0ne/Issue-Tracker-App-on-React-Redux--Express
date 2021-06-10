@@ -2,17 +2,40 @@ import { boardConstants } from '../_constants';
 import { boardService } from '../_services';
 
 export const boardActions = {
+  addBoard,
   getBoards,
   getBoard,
   editBoard,
   deleteQueue
 };
 
-function getBoards() {
-  return dispatch => {
+function addBoard() {
+  return async dispatch => {
     dispatch(request());
 
-    boardService.getBoards()
+    boardService.addBoard()
+      .then(
+        id => {
+          dispatch(success(id))
+        },
+        error => {
+          dispatch(failure(error))
+        }
+      );
+  };
+
+  function request() { return { type: boardConstants.ADD_BOARD_REQUEST } }
+  
+  function success(boardId) { return { type: boardConstants.  ADD_BOARD_SUCCESS, id: boardId } }
+  
+  function failure(error) { return { type: boardConstants.ADD_BOARD_FAILURE, error } }
+}
+
+function getBoards() {
+  return async dispatch => {
+    dispatch(request());
+
+    await boardService.getBoards()
       .then(
         boards => {
           dispatch(success(boards));

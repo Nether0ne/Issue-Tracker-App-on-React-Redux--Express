@@ -1,11 +1,25 @@
 import { authHeader } from "../_helpers";
 
 export const boardService = {
+  addBoard,
   getBoards,
   getBoard,
   editBoard,
   deleteQueue
 };
+
+function addBoard() {
+  const requestOptions = {
+    method: 'POST',
+    headers: authHeader(),
+  }
+
+  return fetch('/api/board', requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      return response.id;
+    });
+}
 
 function getBoards() {
   const requestOptions = {

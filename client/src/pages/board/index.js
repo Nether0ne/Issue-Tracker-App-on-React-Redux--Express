@@ -17,6 +17,7 @@ class BoardPage extends React.Component {
       }
     };
     
+    this.updateQueues();
     this.handleChange = this.handleChange.bind(this);
     this.handleAddQueue = this.handleAddQueue.bind(this);
   }
@@ -62,13 +63,17 @@ class BoardPage extends React.Component {
     await this.props.getBoard(boardId).then(() => this.updateQueues());
   }
 
+  componentWillUnmount() {
+    this.props.initQueue([]);
+  }
+
   updateQueues() {     
     const { board } = this.props;
     this.setState({
       ...this.state,
       board: board
     }) ;
-    this.props.initQueue(board.queues);
+    this.props.initQueue(board.queues || []);
   }
 
   render() {
@@ -87,7 +92,7 @@ class BoardPage extends React.Component {
           </div>
           <div className="overflow-x-auto">
             <div className="flex flex-nowrap w-min">
-              {queueList.map((queue, index) => 
+              {queueList.length > 0 && queueList.map((queue, index) => 
                 <Queue queue={queue} key={index} index={index} callback={() => { this.updateQueues() }}/>
               )}
               <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg">

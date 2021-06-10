@@ -3,7 +3,8 @@ import { boardConstants } from '../_constants';
 export function board(state = {}, action) {
   switch (action.type) {
     case boardConstants.GET_ALL_BOARDS_REQUEST:
-      return { 
+      return {
+        ...state.boards,
         loading: true 
       };
     case boardConstants.GET_ALL_BOARDS_SUCCESS:
@@ -17,22 +18,45 @@ export function board(state = {}, action) {
         loading: false,
         success: false 
       };
+    case boardConstants.ADD_BOARD_REQUEST:
+      return {
+        ...state,
+        newBoard: {
+          loading: true
+        }
+      };
+    case boardConstants.ADD_BOARD_SUCCESS:
+      return {
+        ...state,
+        newBoard: {
+          loading: false,
+          id: action.id
+        }
+      };
+    case boardConstants.ADD_BOARD_FAILURE:
+      return {
+        ...state,
+        newBoard: {
+          loading: false,
+          success: false
+        }
+      };
     case boardConstants.GET_BOARD_REQUEST:
       return {
         loading: true
-      }
+      };
     case boardConstants.GET_BOARD_SUCCESS:
       return action.board
     case boardConstants.GET_BOARD_FAILURE:
       return {
         loading: false,
         success: false
-      }
+      };
     case boardConstants.EDIT_BOARD_REQUEST:
       return {
         ...state,
         loading: true
-      }
+      };
     case boardConstants.EDIT_BOARD_SUCCESS:
       return action.board
     case boardConstants.EDIT_BOARD_FAILURE:
@@ -40,12 +64,12 @@ export function board(state = {}, action) {
         ...state,
         loading: false,
         success: false
-      }
+      };
     case boardConstants.DELETE_QUEUE_REQUEST:
       return {
         ...state,
         loading: true
-      }
+      };
     case boardConstants.DELETE_QUEUE_SUCCESS:
       return action.board
     case boardConstants.DELETE_QUEUE_FAILURE:
@@ -53,7 +77,7 @@ export function board(state = {}, action) {
         ...state,
         loading: false,
         success: false
-      }
+      };
     default:
       return state
   }

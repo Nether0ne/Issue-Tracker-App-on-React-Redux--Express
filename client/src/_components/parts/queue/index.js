@@ -9,9 +9,9 @@ class Queue extends React.Component {
     this.props = props;
 
     this.state = this.props.queue;
-
-    this.state = {    
-      ...this.state,  
+    console.log(this.props)
+    this.state = {
+      ...this.state,
       editing: false,
       title: this.props.queue.title
     }
@@ -66,6 +66,7 @@ class Queue extends React.Component {
 
   render() {
     const queue = this.state;
+    console.log(this.state);
     
     return(
       <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg">
