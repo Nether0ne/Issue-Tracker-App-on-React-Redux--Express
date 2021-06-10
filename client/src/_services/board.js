@@ -2,6 +2,7 @@ import { authHeader } from "../_helpers";
 
 export const boardService = {
   addBoard,
+  deleteBoard,
   getBoards,
   getBoard,
   editBoard,
@@ -12,13 +13,29 @@ function addBoard() {
   const requestOptions = {
     method: 'POST',
     headers: authHeader(),
-  }
+  };
 
   return fetch('/api/board', requestOptions)
     .then(handleResponse)
     .then(response => {
       return response.id;
     });
+}
+
+function deleteBoard(params) {
+  const requestOptions = {
+    method: 'DELETE',
+    headers: authHeader(),
+    body: JSON.stringify(params)
+  };
+
+  requestOptions.headers['Content-Type'] = 'application/json';
+
+  return fetch('/api/board', requestOptions)
+    .then(handleResponse)
+    .then(response => {
+      return response;
+  });
 }
 
 function getBoards() {
@@ -40,7 +57,7 @@ function getBoard(id) {
     headers: authHeader()
   };
   
-  return fetch('/api/board/' + id, requestOptions)
+  return fetch(`/api/board/${id}`, requestOptions)
     .then(handleResponse)
     .then(response=> {
       return response.board;
@@ -69,7 +86,7 @@ function deleteQueue(params) {
     headers: authHeader(),
     body: JSON.stringify(params)
   };
-  console.log(requestOptions)
+  
   requestOptions.headers['Content-Type'] = 'application/json';
 
   return fetch('/api/board/queue', requestOptions)

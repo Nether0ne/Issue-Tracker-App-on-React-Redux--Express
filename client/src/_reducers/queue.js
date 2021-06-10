@@ -4,14 +4,17 @@ export function queue(state = {}, action) {
   switch (action.type) {
     case queueConstants.EDIT_QUEUE_REQUEST:
       return { 
-        ...state.queue,
+        ...state,
         processing: true 
       };
     case queueConstants.EDIT_QUEUE_SUCCESS:
-      return action.queue;
+      return {
+        ...state,
+        ...action.queue
+      }
     case queueConstants.EDIT_QUEUE_FAILURE:
       return { 
-        ...state.queue,
+        ...state,
         processing: false,
         success: false 
       };
@@ -22,7 +25,7 @@ export function queue(state = {}, action) {
 
 export function queueList(state = [], action) {
   const list = state.length > 0 ? [...state] : [];
-  
+  console.log(list);
   switch (action.type) {
     case queueConstants.INIT_QUEUE:
       return action.queues;
@@ -36,12 +39,12 @@ export function queueList(state = [], action) {
         ...list.slice(0, action.position),
         ...list.slice(action.position + 1)
       ];
-    case queueConstants.EDIT_QUEUE_REQUEST:
-    case queueConstants.EDIT_QUEUE_SUCCESS:
-    case queueConstants.EDIT_QUEUE_FAILURE:
+    case queueConstants.EDIT_QUEUELIST_REQUEST:
+    case queueConstants.EDIT_QUEUELIST_SUCCESS:
+    case queueConstants.EDIT_QUEUELIST_FAILURE:
       return [
         ...list.slice(0, action.queue.position),
-        queue(action, action),
+        queue(action.queue, action),
         ...list.slice(action.queue.position + 1)
       ];
     default:

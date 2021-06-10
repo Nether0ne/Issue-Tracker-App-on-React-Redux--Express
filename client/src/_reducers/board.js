@@ -31,12 +31,39 @@ export function board(state = {}, action) {
         newBoard: {
           loading: false,
           id: action.id
+        },
+        redirect: {
+          url: action.url
         }
       };
     case boardConstants.ADD_BOARD_FAILURE:
       return {
         ...state,
         newBoard: {
+          loading: false,
+          success: false
+        }
+      };
+    case boardConstants.DELETE_BOARD_REQUEST:
+      return {
+        ...state,
+        deleteBoard: {
+          loading: true
+        }
+      };
+    case boardConstants.DELETE_BOARD_SUCCESS:
+      return {
+        ...state,
+        deleteBoard: {
+          loading: false,
+          success: true,
+        },
+        redirect: action.url
+      };
+    case boardConstants.DELETE_BOARD_FAILURE:
+      return {
+        ...state,
+        deleteBoard: {
           loading: false,
           success: false
         }

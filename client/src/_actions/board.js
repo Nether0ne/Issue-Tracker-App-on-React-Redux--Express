@@ -3,6 +3,7 @@ import { boardService } from '../_services';
 
 export const boardActions = {
   addBoard,
+  deleteBoard,
   getBoards,
   getBoard,
   editBoard,
@@ -26,9 +27,31 @@ function addBoard() {
 
   function request() { return { type: boardConstants.ADD_BOARD_REQUEST } }
   
-  function success(boardId) { return { type: boardConstants.  ADD_BOARD_SUCCESS, id: boardId } }
+  function success(boardId) { return { type: boardConstants.ADD_BOARD_SUCCESS, id: boardId } }
   
   function failure(error) { return { type: boardConstants.ADD_BOARD_FAILURE, error } }
+}
+
+function deleteBoard(params) {
+  return async dispatch => {
+    dispatch(request(params));
+    
+    boardService.deleteBoard(params)
+      .then(
+        response => {
+          dispatch(success(response))
+        },
+        error => {
+          dispatch(failure(error))
+        }
+      );
+  };
+
+  function request(params) { return { type: boardConstants.DELETE_BOARD_REQUEST } }
+  
+  function success(response) { return { type: boardConstants.DELETE_BOARD_SUCCESS, url: '/' } }
+  
+  function failure(error) { return { type: boardConstants.DELETE_BOARD_FAILURE, error } }
 }
 
 function getBoards() {

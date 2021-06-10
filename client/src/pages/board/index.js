@@ -1,9 +1,9 @@
 import React from 'react';
 import { connect } from 'react-redux';
+import { Redirect } from 'react-router-dom';
 
 import { boardActions, queueActions } from '../../_actions';
 import { Queue } from '../../_components';
-import { queueConstants } from '../../_constants';
 
 class BoardPage extends React.Component {
   constructor(props) {
@@ -17,9 +17,10 @@ class BoardPage extends React.Component {
       }
     };
     
-    this.updateQueues();
+    this.props.initQueue([]);
     this.handleChange = this.handleChange.bind(this);
     this.handleAddQueue = this.handleAddQueue.bind(this);
+    this.handleDeleteBoard = this.handleDeleteBoard.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -58,6 +59,16 @@ class BoardPage extends React.Component {
     });
   }
 
+  handleDeleteBoard(e) {
+    e.preventDefault();
+    
+    this.props.deleteBoard({
+      board: {
+        id: this.state.board._id
+      }
+    });
+  }
+
   async componentDidMount() {
     const boardId = this.props.match.params.id;
     await this.props.getBoard(boardId).then(() => this.updateQueues());
@@ -69,6 +80,7 @@ class BoardPage extends React.Component {
 
   updateQueues() {     
     const { board } = this.props;
+    console.log(board);
     this.setState({
       ...this.state,
       board: board
@@ -80,15 +92,30 @@ class BoardPage extends React.Component {
     const { board } = this.state;
     const { queueList } = this.props;
     const { newQueue } = this.state;
-    
+    const { redirect, success } = this.props.board;
+
+    if (success === false || (redirect && redirect.length > 0)) {
+      return <Redirect to={redirect} />
+    }
+
     return (
-      <div className="flex flex-wrap flex-col gap-2 w-3/4 m-auto">
+      <div className="flex flex-wrap flex-col gap-2 p-3 m-auto">
       {board.loading && <em>Loading boards...</em>}
       {!board && <span className="text-danger">Error loading board!</span>}
       {board && queueList &&
         <div className="w-full">
-          <div className="board-header">
-            <h3>{board.title}</h3>
+          <div className="flex flex-row justify-between">
+            <h3 className="font-bold">{board.title}</h3>
+            <div className="dropdown">
+              <a className="nav-link p-0" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 text-black" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z" />
+                </svg>
+              </a>
+              <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                <li><a className="dropdown-item" href="#" onClick={this.handleDeleteBoard}>Delete board</a></li>
+              </ul>
+            </div>
           </div>
           <div className="overflow-x-auto">
             <div className="flex flex-nowrap w-min">
@@ -129,6 +156,7 @@ function mapState(state) {
 const actionCreators = {
   getBoard: boardActions.getBoard,
   editBoard: boardActions.editBoard,
+  deleteBoard: boardActions.deleteBoard,
   pushQueue: queueActions.push,
   popQueue: queueActions.pop,
   getQueue: queueActions.get,
