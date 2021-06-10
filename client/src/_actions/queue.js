@@ -12,103 +12,118 @@ export const queueActions = {
 };
 
 function add(params) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(request());
 
-    queueService.add(params)
-      .then(
-        queue => {
-          dispatch(success(queue))
-        },
-        error => {
-          dispatch(failure(error))
-        }
-      );
+    queueService.add(params).then(
+      (queue) => {
+        dispatch(success(queue));
+      },
+      (error) => {
+        dispatch(failure(error));
+      }
+    );
   };
 
-  function request() { return { type: queueConstants.ADD_QUEUE_REQUEST } }
+  function request() {
+    return { type: queueConstants.ADD_QUEUE_REQUEST };
+  }
 
-  function success(queue) { return { type: queueConstants.ADD_QUEUE_SUCCESS, queue } }
+  function success(queue) {
+    return { type: queueConstants.ADD_QUEUE_SUCCESS, queue };
+  }
 
-  function failure(error) { return { type: queueConstants.ADD_QUEUE_FAILURE, error } }
-};
+  function failure(error) {
+    return { type: queueConstants.ADD_QUEUE_FAILURE, error };
+  }
+}
 
 function edit(params) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(request(params));
 
-    queueService.edit(params)
-      .then(
-        queue => {
-          dispatch(success(queue))
-        },
-        error => {
-          dispatch(failure(error))
-        }
-      );
+    queueService.edit(params).then(
+      (queue) => {
+        dispatch(success(queue));
+      },
+      (error) => {
+        dispatch(failure(error));
+      }
+    );
   };
 
-  function request(queue) { return { type: queueConstants.EDIT_QUEUE_REQUEST, queue } }
+  function request(queue) {
+    return { type: queueConstants.EDIT_QUEUE_REQUEST, queue };
+  }
 
-  function success(queue) { return { type: queueConstants.EDIT_QUEUE_SUCCESS, queue } }
+  function success(queue) {
+    return { type: queueConstants.EDIT_QUEUE_SUCCESS, queue };
+  }
 
-  function failure(error) { return { type: queueConstants.EDIT_QUEUE_FAILURE, error } }
-};
+  function failure(error) {
+    return { type: queueConstants.EDIT_QUEUE_FAILURE, error };
+  }
+}
 
 function del(params) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch(request());
 
-    queueService.del(params)
-      .then(
-        queue => {
-          dispatch(success(queue))
-        },
-        error => {
-          dispatch(failure(error))
-        }
-      );
+    queueService.del(params).then(
+      (queue) => {
+        dispatch(success(queue));
+      },
+      (error) => {
+        dispatch(failure(error));
+      }
+    );
   };
 
-  function request() { return { type: queueConstants.DELETE_QUEUE_REQUEST } }
+  function request() {
+    return { type: queueConstants.DELETE_QUEUE_REQUEST };
+  }
 
-  function success(queue) { return { type: queueConstants.DELETE_QUEUE_SUCCESS, queue } }
+  function success(queue) {
+    return { type: queueConstants.DELETE_QUEUE_SUCCESS, queue };
+  }
 
-  function failure(error) { return { type: queueConstants.DELETE_QUEUE_FAILURE, error } }
-};
+  function failure(error) {
+    return { type: queueConstants.DELETE_QUEUE_FAILURE, error };
+  }
+}
 
 function push(queue) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: queueConstants.ADD_QUEUE,
       queue: queue
     });
   };
-};
+}
 
 function pop(queue) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: queueConstants.DELETE_QUEUE,
       queue: queue
-    })
+    });
   };
-};
+}
 
 function get(index) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: queueConstants.GET_QUEUE,
       index: index
     });
   };
-};
+}
 
 function init(queues) {
-  return dispatch => {
+  return (dispatch) => {
     dispatch({
       type: queueConstants.INIT_QUEUE,
       queues: queues
     });
   };
-};
+}

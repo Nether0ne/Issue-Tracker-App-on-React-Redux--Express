@@ -17,11 +17,11 @@ export class App extends React.Component {
 
   render() {
     return (
-      <div id='page'>
+      <div id="page">
         <Alert />
-        <div className="flex flex-col h-screen justify-between gap-4">                         
+        <div className="flex flex-col h-screen justify-between gap-4">
           <header>
-            <Header/>
+            <Header />
           </header>
           <div className="h-screen items-center justify-center">
             <Switch>
@@ -33,10 +33,10 @@ export class App extends React.Component {
             </Switch>
           </div>
           <footer>
-            <Footer/>
+            <Footer />
           </footer>
-        </div>        
-      </div>      
+        </div>
+      </div>
     );
   }
-};
+}

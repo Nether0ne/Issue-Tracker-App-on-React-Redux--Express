@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader } from '../_helpers';
 
 export const queueService = {
   add,
@@ -17,26 +17,26 @@ function add(params) {
 
   return fetch('/api/queue/', requestOptions)
     .then(handleResponse)
-    .then(response => {
+    .then((response) => {
       return response.queue;
-  });
+    });
 }
 
 function edit(params) {
   const requestOptions = {
     method: 'PUT',
     headers: authHeader(),
-    body: JSON.stringify({ queue : params })
+    body: JSON.stringify({ queue: params })
   };
-  
+
   requestOptions.headers['Content-Type'] = 'application/json';
-  
+
   return fetch('/api/queue/', requestOptions)
     .then(handleResponse)
-    .then(response => {
+    .then((response) => {
       return response.queue;
-  });
-};
+    });
+}
 
 function del(params) {
   const requestOptions = {
@@ -49,13 +49,13 @@ function del(params) {
 
   return fetch('/api/queue/', requestOptions)
     .then(handleResponse)
-    .then(response => {
+    .then((response) => {
       return response.queue;
-  });
+    });
 }
 
 function handleResponse(response) {
-  return response.text().then(text => {
+  return response.text().then((text) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {

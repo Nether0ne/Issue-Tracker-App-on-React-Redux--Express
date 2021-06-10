@@ -20,6 +20,6 @@ export function authentication(state = initialState, action) {
     case userConstants.LOGOUT:
       return {};
     default:
-      return state
+      return state;
   }
 }

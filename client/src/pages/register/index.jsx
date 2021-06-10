@@ -47,45 +47,65 @@ class RegisterPage extends React.Component {
     const { email, password } = user;
     return (
       <div className="m-auto w-96">
-        <h2 className="text-center font-bold uppercase mb-8 text-2xl">Register</h2>
-        
+        <h2 className="text-center font-bold uppercase mb-8 text-2xl">
+          Register
+        </h2>
+
         <form name="form" onSubmit={this.handleSubmit}>
           <div className="flex flex-col gap-3">
             <div>
-              <label htmlFor="email" className="form-label">Email</label>
+              <label htmlFor="email" className="form-label">
+                Email
+              </label>
               <div className="input-group has-validation">
-                <input type="text" className={'form-control ' + (submitted && !/.+@.+\..+/.test(email) ? 'is-invalid' : '')} 
-                  name="email" value={email} onChange={this.handleChange} />
-                <div className="invalid-feedback">
-                  Invalid email
-                </div>
-              </div>
-            </div>
-            
-            <div>
-              <label htmlFor="password" className="form-label">Password</label>
-              <div className="input-group has-validation">
-                <input type="password" className={'form-control ' + (submitted && !password ? 'is-invalid' : '')} 
-                  name="password" value={password} onChange={this.handleChange} />
-                <div className="invalid-feedback">
-                  Password is required
-                </div>
+                <input
+                  type="text"
+                  className={
+                    'form-control ' +
+                    (submitted && !/.+@.+\..+/.test(email) ? 'is-invalid' : '')
+                  }
+                  name="email"
+                  value={email}
+                  onChange={this.handleChange}
+                />
+                <div className="invalid-feedback">Invalid email</div>
               </div>
             </div>
 
             <div>
-              {registering
-                ? <img src="" /> // TODO loading
-                : 
+              <label htmlFor="password" className="form-label">
+                Password
+              </label>
+              <div className="input-group has-validation">
+                <input
+                  type="password"
+                  className={
+                    'form-control ' +
+                    (submitted && !password ? 'is-invalid' : '')
+                  }
+                  name="password"
+                  value={password}
+                  onChange={this.handleChange}
+                />
+                <div className="invalid-feedback">Password is required</div>
+              </div>
+            </div>
+
+            <div>
+              {registering ? (
+                <img src="" /> // TODO loading
+              ) : (
                 <div className="flex gap-24">
                   <div className="flex-1">
                     <button className="btn btn-success w-100">Register</button>
                   </div>
                   <div className="flex-1">
-                    <Link to="/login" className="btn btn-secondary w-100">Cancel</Link>
+                    <Link to="/login" className="btn btn-secondary w-100">
+                      Cancel
+                    </Link>
                   </div>
                 </div>
-              }
+              )}
             </div>
           </div>
         </form>
@@ -101,7 +121,7 @@ function mapState(state) {
 
 const actionCreators = {
   register: userActions.register
-}
+};
 
 const connectedRegisterPage = connect(mapState, actionCreators)(RegisterPage);
 export { connectedRegisterPage as RegisterPage };

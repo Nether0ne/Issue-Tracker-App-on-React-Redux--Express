@@ -5,7 +5,7 @@ const CommentSchema = new mongoose.Schema({
   createdBy: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'User'
-  },
+  }
 });
 
 mongoose.model('Comment', CommentSchema);

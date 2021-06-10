@@ -13,7 +13,7 @@ class Header extends React.Component {
     this.props = props;
   }
 
-  componentDidMount() {}
+  componentDidMount() { }
 
   handleLogout() {
     return (e) => this.props.logout();
@@ -22,8 +22,8 @@ class Header extends React.Component {
   render() {
     const { authentication } = this.props;
     const { loggedIn, user } = authentication;
-    
-    return(
+
+    return (
       <div>
         {loggedIn &&
           <nav className="navbar navbar-expand-lg navbar-light bg-indigo-500">
@@ -41,19 +41,19 @@ class Header extends React.Component {
                         </svg>
                         Boards
                       </button>
-                    </Link>           
+                    </Link>
                   </li>
                 </ul>
                 <div className="dropdown dropstart">
                   <a className="nav-link" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                    <Avatar className="d-flex" name={user.email} size="45px" round="25px" color="darkgray" maxInitials={1} fgColor="black"/>
+                    <Avatar className="d-flex" name={user.email} size="45px" round="25px" color="darkgray" maxInitials={1} fgColor="black" />
                   </a>
                   <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                     <li><a className="dropdown-item" href="#">My profile</a></li> {/*TODO link to logged in user */}
                     <li><hr className="dropdown-divider"></hr></li>
                     <li><Link to="/login" className="dropdown-item" onClick={this.handleLogout()}>Logout</Link></li>
                   </ul>
-                </div>              
+                </div>
               </div>
             </div>
           </nav>

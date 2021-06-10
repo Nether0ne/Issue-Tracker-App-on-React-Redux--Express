@@ -1,4 +1,4 @@
-import { authHeader } from "../_helpers";
+import { authHeader } from '../_helpers';
 
 export const boardService = {
   addBoard,
@@ -12,12 +12,12 @@ export const boardService = {
 function addBoard() {
   const requestOptions = {
     method: 'POST',
-    headers: authHeader(),
+    headers: authHeader()
   };
 
   return fetch('/api/board', requestOptions)
     .then(handleResponse)
-    .then(response => {
+    .then((response) => {
       return response.id;
     });
 }
@@ -33,9 +33,9 @@ function deleteBoard(params) {
 
   return fetch('/api/board', requestOptions)
     .then(handleResponse)
-    .then(response => {
+    .then((response) => {
       return response;
-  });
+    });
 }
 
 function getBoards() {
@@ -43,61 +43,61 @@ function getBoards() {
     method: 'GET',
     headers: authHeader()
   };
-  
+
   return fetch('/api/board', requestOptions)
     .then(handleResponse)
-    .then(response => {
+    .then((response) => {
       return response.boards;
     });
 }
 
 function getBoard(id) {
   const requestOptions = {
-    method: "GET",
+    method: 'GET',
     headers: authHeader()
   };
-  
+
   return fetch(`/api/board/${id}`, requestOptions)
     .then(handleResponse)
-    .then(response=> {
+    .then((response) => {
       return response.board;
     });
 }
 
 function editBoard(params) {
   const requestOptions = {
-    method: "PUT",
+    method: 'PUT',
     headers: authHeader(),
     body: JSON.stringify(params)
   };
-  
+
   requestOptions.headers['Content-Type'] = 'application/json';
-  
+
   return fetch('/api/board/', requestOptions)
     .then(handleResponse)
-    .then(response=> {
+    .then((response) => {
       return response.board;
     });
 }
 
 function deleteQueue(params) {
   const requestOptions = {
-    method: "DELETE",
+    method: 'DELETE',
     headers: authHeader(),
     body: JSON.stringify(params)
   };
-  
+
   requestOptions.headers['Content-Type'] = 'application/json';
 
   return fetch('/api/board/queue', requestOptions)
     .then(handleResponse)
-    .then(response => {
-      return response.board
+    .then((response) => {
+      return response.board;
     });
 }
 
 function handleResponse(response) {
-  return response.text().then(text => {
+  return response.text().then((text) => {
     const data = text && JSON.parse(text);
     if (!response.ok) {
       if (response.status === 401) {

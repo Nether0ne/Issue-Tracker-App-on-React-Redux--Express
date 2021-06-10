@@ -5,18 +5,18 @@ export function board(state = {}, action) {
     case boardConstants.GET_ALL_BOARDS_REQUEST:
       return {
         ...state.boards,
-        loading: true 
+        loading: true
       };
     case boardConstants.GET_ALL_BOARDS_SUCCESS:
-      return { 
+      return {
         loading: false,
         success: true,
         boards: action.boards
       };
     case boardConstants.GET_ALL_BOARDS_FAILURE:
-      return { 
+      return {
         loading: false,
-        success: false 
+        success: false
       };
     case boardConstants.ADD_BOARD_REQUEST:
       return {
@@ -56,7 +56,7 @@ export function board(state = {}, action) {
         ...state,
         deleteBoard: {
           loading: false,
-          success: true,
+          success: true
         },
         redirect: action.url
       };
@@ -73,7 +73,7 @@ export function board(state = {}, action) {
         loading: true
       };
     case boardConstants.GET_BOARD_SUCCESS:
-      return action.board
+      return action.board;
     case boardConstants.GET_BOARD_FAILURE:
       return {
         loading: false,
@@ -85,7 +85,7 @@ export function board(state = {}, action) {
         loading: true
       };
     case boardConstants.EDIT_BOARD_SUCCESS:
-      return action.board
+      return action.board;
     case boardConstants.EDIT_BOARD_FAILURE:
       return {
         ...state,
@@ -98,7 +98,7 @@ export function board(state = {}, action) {
         loading: true
       };
     case boardConstants.DELETE_QUEUE_SUCCESS:
-      return action.board
+      return action.board;
     case boardConstants.DELETE_QUEUE_FAILURE:
       return {
         ...state,
@@ -106,6 +106,6 @@ export function board(state = {}, action) {
         success: false
       };
     default:
-      return state
+      return state;
   }
 }

@@ -9,14 +9,14 @@ class Queue extends React.Component {
     this.props = props;
 
     this.state = this.props.queue;
-    
+
     this.state = {
       ...this.state,
       editing: false,
       title: this.props.queue.title,
       position: this.props.index
     }
-    
+
     this.handleEdit = this.handleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -34,9 +34,9 @@ class Queue extends React.Component {
 
   handleEdit(e) {
     e.preventDefault();
-    this.setState({ 
+    this.setState({
       ...this.state,
-      editing: true 
+      editing: true
     });
   }
 
@@ -57,24 +57,24 @@ class Queue extends React.Component {
 
     this.setState({
       ...this.state,
-       editing: false 
+      editing: false
     });
 
     if (this.props.queue.title !== this.state.title) {
       this.props.edit(this.state);
-    }  
+    }
   }
 
   render() {
     const queue = this.state;
-    
-    return(
+
+    return (
       <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg">
-        {queue.editing ? 
+        {queue.editing ?
           <form>
             <div>
               <div className="input-group has-validation">
-                <input type="text" className={'form-control ' + (queue.editing && queue.title.length === 0 ? 'is-invalid' : '')} 
+                <input type="text" className={'form-control ' + (queue.editing && queue.title.length === 0 ? 'is-invalid' : '')}
                   name="title" value={queue.title} onChange={this.handleChange} onBlur={this.handleSubmit} />
                 <div className="invalid-feedback">
                   No task title provided
@@ -94,12 +94,12 @@ class Queue extends React.Component {
               <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
                 <li><a className="dropdown-item" href="#" onClick={this.handleDeleteQueue}>Delete</a></li>
               </ul>
-            </div>     
+            </div>
           </div>
         }
         {queue.tasks && queue.tasks.length > 0 &&
           <div className="flex flex-col mt-2">
-            {queue.tasks.map((task, index) => 
+            {queue.tasks.map((task, index) =>
               <TaskCard task={task} key={index} />
             )}
           </div>

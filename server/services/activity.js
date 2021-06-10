@@ -22,40 +22,43 @@ class ActivityService {
 
   log() {
     return this.formQuery().then((query) => {
-      Board.findOne(query).then((board) => {
-        if (!board) { return 0 }
-        const activity = new Activity();
-        activity.createdBy = this.createdBy;
-        activity.object = this.object;
-        activity.ref = this.ref;
+      Board.findOne(query)
+        .then((board) => {
+          if (!board) {
+            return 0;
+          }
+          const activity = new Activity();
+          activity.createdBy = this.createdBy;
+          activity.object = this.object;
+          activity.ref = this.ref;
 
-        let title = '';
+          let title = '';
 
-        const user = User.findById(this.createdBy);
+          const user = User.findById(this.createdBy);
 
-        title += user.email;
-        title += ' ' + this.actions[this.action.type];
-        title += ' ' + this.object + (this.action.attr ? '\'s' : '');
+          title += user.email;
+          title += ' ' + this.actions[this.action.type];
+          title += ' ' + this.object + (this.action.attr ? "'s" : '');
 
-        if (this.action.attr) {
-          title += ' ' + this.action.attr;
-        }
+          if (this.action.attr) {
+            title += ' ' + this.action.attr;
+          }
 
+          title += ' at ' + new Date().toLocaleDateString('en-US');
+          activity.action = title;
+          activity.save();
 
-        title += ' at ' + new Date().toLocaleDateString('en-US');
-        activity.action = title;
-        activity.save();
-
-        board.activities.push(activity);
-        return board;
-      }).then((board) => {
-        board.save();
-      });
+          board.activities.push(activity);
+          return board;
+        })
+        .then((board) => {
+          board.save();
+        });
     });
   }
 
   formQuery() {
-    return new Promise(async(resolve, reject) => {
+    return new Promise(async (resolve, reject) => {
       let query = {};
       let _id = this.id;
 

@@ -3,23 +3,23 @@ import { queueConstants } from '../_constants';
 export function queue(state = {}, action) {
   switch (action.type) {
     case queueConstants.EDIT_QUEUE_REQUEST:
-      return { 
+      return {
         ...state,
-        processing: true 
+        processing: true
       };
     case queueConstants.EDIT_QUEUE_SUCCESS:
       return {
         ...state,
         ...action.queue
-      }
+      };
     case queueConstants.EDIT_QUEUE_FAILURE:
-      return { 
+      return {
         ...state,
         processing: false,
-        success: false 
+        success: false
       };
     default:
-      return state
+      return state;
   }
 }
 
@@ -50,4 +50,4 @@ export function queueList(state = [], action) {
     default:
       return state;
   }
-};
+}
