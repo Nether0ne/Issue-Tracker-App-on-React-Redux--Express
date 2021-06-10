@@ -18,23 +18,68 @@ class BoardPage extends React.Component {
     };
 
     this.props.initQueue([]);
-    this.handleChange = this.handleChange.bind(this);
+    this.handleChange = this.handleNewQueueChange.bind(this);
     this.handleAddQueue = this.handleAddQueue.bind(this);
     this.handleDeleteBoard = this.handleDeleteBoard.bind(this);
+    this.handleTitleChange = this.handleTitleChange.bind(this);
+    this.handleTitleSubmit = this.handleTitleSubmit.bind(this);
+    this.onKeyDown = this.onKeyDown.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
     return this.props.board._id === nextProps.board._id;
   }
 
-  handleChange(e, parent) {
+  handleNewQueueChange(e) {
     const { name, value } = e.target;
     this.setState({
       ...this.state,
-      [parent]: {
+      newQueue: {
         [name]: value
       }
     });
+  }
+
+  handleTitleChange(e) {
+    const { name, value } = e.target;
+    this.setState({
+      ...this.state,
+      board: {
+        ...this.state.board,
+        [name]: value
+      }
+    });
+  }
+
+  async handleTitleSubmit(e) {
+    e.preventDefault();
+
+    if (this.state.board.title.length > 0) {
+      await this.props
+        .editBoard({
+          board: {
+            id: this.state.board._id,
+            title: this.state.board.title
+          }
+        })
+        .then(() => {
+          const { board } = this.props;
+          this.setState({
+            ...this.state,
+            board: {
+              ...this.state.board,
+              editing: false
+            }
+          });
+          this.updateQueues();
+        });
+    }
+  }
+
+  onKeyDown(e) {
+    if (e.key === 'Enter') {
+      this.handleTitleSubmit(e);
+    }
   }
 
   async handleAddQueue(e) {
@@ -57,7 +102,6 @@ class BoardPage extends React.Component {
             title: ''
           }
         });
-        this.updateQueues();
       });
   }
 
@@ -107,7 +151,38 @@ class BoardPage extends React.Component {
         {board && queueList && (
           <div className="w-full">
             <div className="flex flex-row justify-between">
-              <h3 className="font-bold">{board.title}</h3>
+              {board.editing ? (
+                <div className="has-validation">
+                  <input
+                    className={
+                      board.editing && board.title.length === 0
+                        ? 'is-invalid'
+                        : ''
+                    }
+                    type="text"
+                    name="title"
+                    value={board.title}
+                    placeholder="Board name"
+                    onChange={this.handleTitleChange}
+                    onBlur={this.handleTitleSubmit}
+                    onKeyDown={this.handleKeyDown}
+                  />
+                  <div className="invalid-feedback">
+                    No board title provided
+                  </div>
+                </div>
+              ) : (
+                <div
+                  className="font-bold"
+                  onDoubleClick={() =>
+                    this.setState({
+                      ...this.state,
+                      board: { ...this.state.board, editing: true }
+                    })
+                  }>
+                  <h3>{this.state.board.title}</h3>
+                </div>
+              )}
               <div className="dropdown">
                 <a
                   className="nav-link p-0"
@@ -163,7 +238,7 @@ class BoardPage extends React.Component {
                       name="title"
                       value={newQueue.title}
                       placeholder="Add a list..."
-                      onChange={(e) => this.handleChange(e, 'newQueue')}
+                      onChange={(e) => this.handleNewQueueChange(e, 'newQueue')}
                     />
                   </div>
                   {newQueue.title.length > 0 && (
