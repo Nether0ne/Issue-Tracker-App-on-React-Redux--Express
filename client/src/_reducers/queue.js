@@ -4,14 +4,14 @@ export function queue(state = {}, action) {
   switch (action.type) {
     case queueConstants.EDIT_QUEUE_REQUEST:
       return { 
-        ...state,
+        ...state.queue,
         processing: true 
       };
     case queueConstants.EDIT_QUEUE_SUCCESS:
       return action.queue;
     case queueConstants.EDIT_QUEUE_FAILURE:
       return { 
-        ...state,
+        ...state.queue,
         processing: false,
         success: false 
       };
@@ -41,7 +41,7 @@ export function queueList(state = [], action) {
     case queueConstants.EDIT_QUEUE_FAILURE:
       return [
         ...list.slice(0, action.queue.position),
-        queue(action.queue, action),
+        queue(action, action),
         ...list.slice(action.queue.position + 1)
       ];
     default:

@@ -50,7 +50,7 @@ router.post('/', (req, res, next) => {
 });
 
 router.put('/', (req, res, next) => {
-  Queue.findById(req.body.queue.id).populate('tasks').then((queue) => {
+  Queue.findById(req.body.queue._id).populate('tasks').then((queue) => {
     if (!queue) { return 0; } // todo 401
 
     if (typeof req.body.queue.title !== 'undefined') {
@@ -75,10 +75,10 @@ router.put('/', (req, res, next) => {
 });
 
 router.delete('/', (req, res, next) => {
-  Board.findOne({ queues: req.body.queue.id }).then((board) => {
+  Board.findOne({ queues: req.body.queue._id }).then((board) => {
     if (!board) { return 0; } // TODO return 401
 
-    board.queues.pull({ _id: req.body.queue.id });
+    board.queues.pull({ _id: req.body.queue._id });
     board.save();
 
     const activity = new ActivityService(
