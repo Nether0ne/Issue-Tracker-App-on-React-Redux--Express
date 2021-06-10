@@ -2,7 +2,7 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const Task = mongoose.model('Task');
 const Comment = mongoose.model('Comment');
-const ActivityService = require('../../services/activityService');
+const ActivityService = require('../../services/activity');
 
 router.get('/:taskId', (req, res, next) => {
   Task.findById(req.params.taskId).then((task) => {

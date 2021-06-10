@@ -2,7 +2,7 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const Queue = mongoose.model('Queue');
 const Board = mongoose.model('Board');
-const ActivityService = require('../../services/activityService');
+const ActivityService = require('../../services/activity');
 
 router.get('/:boardId', (req, res, next) => {
   Board.findById(req.params.boardId)

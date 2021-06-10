@@ -2,7 +2,7 @@ const router = require('express').Router();
 const mongoose = require('mongoose');
 const Task = mongoose.model('Task');
 const Queue = mongoose.model('Queue');
-const ActivityService = require('../../services/activityService');
+const ActivityService = require('../../services/activity');
 
 router.get('/:id', (req, res, next) => {
   Task.findById(req.params.id).populate('comments').then((task) => {

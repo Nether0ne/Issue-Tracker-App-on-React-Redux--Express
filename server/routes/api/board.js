@@ -5,7 +5,7 @@ const Queue = mongoose.model('Queue');
 const Task = mongoose.model('Task');
 const Comment = mongoose.model('Comment');
 const Activity = mongoose.model('Activity');
-const ActivityService = require('../../services/activityService');
+const ActivityService = require('../../services/activity');
 const auth = require('../auth'); 
 
 router.get('/', auth.required, (req, res, next) => {
