@@ -5,6 +5,7 @@ services:
       context: ./server/
       dockerfile: Dockerfile
     command: npm run server
+    restart: always
     env_file:
       - ./server/.env
     volumes:
@@ -22,6 +23,7 @@ services:
       context: ./client/
       dockerfile: Dockerfile
     command: npm start
+    restart: always
     volumes:
       - ./client/:/usr/app
       - /usr/app/node_modules

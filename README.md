@@ -2,18 +2,26 @@
 
 ## Quick Start
 
-``` bash
-# Install dependencies
-npm run install
+### Setup
 
-# Run the client & server with concurrently
-npm run dev
+```bash
+# Docker build
+docker-compose build
 
-# Run the Express server only
-npm run server
-
-# Run the React client only
-npm run client
-
-# Server runs on http://localhost:5000 and client on http://localhost:3000
 ```
+
+## Startup
+
+### Run Docker
+
+```bash
+docker-compose up
+```
+
+### Application
+
+Open client at http://localhost:3000
+Authorize with next credentials:
+
+- Email: test@email.ru
+- Password: 123
