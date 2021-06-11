@@ -102,6 +102,7 @@ class BoardPage extends React.Component {
             title: ''
           }
         });
+        this.updateQueues();
       });
   }
 
