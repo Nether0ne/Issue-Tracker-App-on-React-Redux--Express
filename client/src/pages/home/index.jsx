@@ -45,7 +45,7 @@ class HomePage extends React.Component {
     }
 
     return (
-      <div className="flex flex-col gap-2 w-3/4 m-auto h-screen">
+      <div className="flex flex-col gap-2 w-3/4 m-auto">
         <div className="flex-col p-2">
           <h2 className="font-bold text-xl">
             <svg

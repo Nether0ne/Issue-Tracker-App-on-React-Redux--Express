@@ -54,7 +54,10 @@ class BoardPage extends React.Component {
   async handleTitleSubmit(e) {
     e.preventDefault();
 
-    if (this.state.board.title.length > 0) {
+    if (
+      this.state.board.title.length > 0 &&
+      this.state.board.title !== this.props.board.title
+    ) {
       await this.props
         .editBoard({
           board: {
