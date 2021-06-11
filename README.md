@@ -15,12 +15,14 @@ docker-compose build
 ### Run Docker
 
 ```bash
+# Docker up
 docker-compose up
 ```
 
 ### Application
 
 Open client at http://localhost:3000
+
 Authorize with next credentials:
 
 - Email: test@email.ru
