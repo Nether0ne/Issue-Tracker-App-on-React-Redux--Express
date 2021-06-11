@@ -1,0 +1,87 @@
+[{
+  "_id": {
+    "$oid": "60c36a6908c76300242c1fc6"
+  },
+  "tasks": [
+    {
+      "$oid": "60c36a6908c76300242c1fc7"
+    }
+  ],
+  "title": "Inbox",
+  "createdAt": {
+    "$date": "2021-06-11T13:51:37.733Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:52:40.390Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60c36aab08c76300242c1fcd"
+  },
+  "tasks": [],
+  "title": "In progress",
+  "createdAt": {
+    "$date": "2021-06-11T13:52:43.561Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:52:43.561Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60c36ab608c76300242c1fcf"
+  },
+  "tasks": [],
+  "title": "Done",
+  "createdAt": {
+    "$date": "2021-06-11T13:52:54.736Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:52:54.736Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60c36bbf08c76300242c1fd3"
+  },
+  "tasks": [
+    {
+      "$oid": "60c36bbf08c76300242c1fd4"
+    }
+  ],
+  "title": "Test",
+  "createdAt": {
+    "$date": "2021-06-11T13:57:19.335Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:57:19.335Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60c36bc208c76300242c1fd9"
+  },
+  "tasks": [],
+  "title": "Test 2",
+  "createdAt": {
+    "$date": "2021-06-11T13:57:22.796Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:57:22.796Z"
+  },
+  "__v": 0
+},{
+  "_id": {
+    "$oid": "60c36bc408c76300242c1fdb"
+  },
+  "tasks": [],
+  "title": "Test 3",
+  "createdAt": {
+    "$date": "2021-06-11T13:57:24.719Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:57:24.719Z"
+  },
+  "__v": 0
+}]

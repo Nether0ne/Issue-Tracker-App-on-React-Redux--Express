@@ -1,0 +1,66 @@
+[{
+  "_id": {
+    "$oid": "60c36a6908c76300242c1fc5"
+  },
+  "queues": [
+    {
+      "$oid": "60c36a6908c76300242c1fc6"
+    },
+    {
+      "$oid": "60c36aab08c76300242c1fcd"
+    },
+    {
+      "$oid": "60c36ab608c76300242c1fcf"
+    }
+  ],
+  "activities": [
+    {
+      "$oid": "60c36a6908c76300242c1fca"
+    },
+    {
+      "$oid": "60c36aa808c76300242c1fcc"
+    }
+  ],
+  "title": "Main board",
+  "createdBy": {
+    "$oid": "60c36a5d08c76300242c1fc4"
+  },
+  "createdAt": {
+    "$date": "2021-06-11T13:51:37.733Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:52:54.737Z"
+  },
+  "__v": 4
+},{
+  "_id": {
+    "$oid": "60c36bbf08c76300242c1fd2"
+  },
+  "queues": [
+    {
+      "$oid": "60c36bbf08c76300242c1fd3"
+    },
+    {
+      "$oid": "60c36bc208c76300242c1fd9"
+    },
+    {
+      "$oid": "60c36bc408c76300242c1fdb"
+    }
+  ],
+  "activities": [
+    {
+      "$oid": "60c36bbf08c76300242c1fd7"
+    }
+  ],
+  "title": "Board #2",
+  "createdBy": {
+    "$oid": "60c36bb708c76300242c1fd1"
+  },
+  "createdAt": {
+    "$date": "2021-06-11T13:57:19.336Z"
+  },
+  "updatedAt": {
+    "$date": "2021-06-11T13:57:24.719Z"
+  },
+  "__v": 3
+}]
