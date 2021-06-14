@@ -38,6 +38,7 @@ class HomePage extends React.Component {
 
   render() {
     const { loading, success, boards } = this.state;
+    const { user } = this.props;
     const { newBoard } = this.props.board;
 
     if (newBoard && newBoard.id) {
@@ -72,8 +73,11 @@ class HomePage extends React.Component {
           <div className="flex flex-row flex-wrap self-left gap-4 text-white font-bold">
             {boards.map((board) => (
               <Link to={'/board/' + board.id} key={board.id}>
-                <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600">
+                <div className="w-64 h-32 p-3 bg-indigo-500 rounded-lg hover:bg-indigo-600 flex justify-between">
                   <p className="">{board.title}</p>
+                  {user.id === board.createdBy && (
+                    <div className="own-board m-1"></div>
+                  )}
                 </div>
               </Link>
             ))}

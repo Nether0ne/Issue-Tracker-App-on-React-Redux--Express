@@ -1,4 +1,5 @@
 import { queueConstants } from '../_constants';
+import { taskList } from './task';
 
 export function queue(state = {}, action) {
   switch (action.type) {
@@ -25,7 +26,7 @@ export function queue(state = {}, action) {
 
 export function queueList(state = [], action) {
   const list = state.length > 0 ? [...state] : [];
-  console.log(list);
+
   switch (action.type) {
     case queueConstants.INIT_QUEUE:
       return action.queues;

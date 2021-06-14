@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { boardActions, queueActions } from '../../../_actions';
+import { boardActions, queueActions, taskActions } from '../../../_actions';
 import { TaskCard } from '../task';
 
 class Queue extends React.Component {
@@ -14,13 +14,20 @@ class Queue extends React.Component {
       ...this.state,
       editing: false,
       title: this.props.queue.title,
-      position: this.props.index
+      position: this.props.index,
+      newTask: {
+        title: ''
+      }
     };
+
+    this.props.addTasks(this.props.queue.tasks);
 
     this.handleEdit = this.handleEdit.bind(this);
     this.handleChange = this.handleChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.handleDeleteQueue = this.handleDeleteQueue.bind(this);
+    this.handleNewTaskEdit = this.handleNewTaskEdit.bind(this);
+    this.handleAddTask = this.handleAddTask.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -38,6 +45,44 @@ class Queue extends React.Component {
       ...this.state,
       editing: true
     });
+  }
+
+  handleNewTaskEdit(e) {
+    const { name, value } = e.target;
+    this.setState({
+      ...this.state,
+      newTask: {
+        [name]: value
+      }
+    });
+  }
+
+  async handleAddTask(e) {
+    e.preventDefault();
+    const { title } = this.state.newTask;
+
+    if (title.length > 0) {
+      await this.props
+        .addTask({
+          queue: {
+            id: this.props.queue._id
+          },
+          task: {
+            title: title
+          }
+        })
+        .then(() => {
+          const { queue } = this.props;
+          console.log(queue);
+          this.setState({
+            ...queue,
+            newTask: {
+              title: ''
+            }
+          });
+        })
+        .then(() => this.props.callback());
+    }
   }
 
   handleDeleteQueue(e) {
@@ -62,13 +107,24 @@ class Queue extends React.Component {
       editing: false
     });
 
-    if (this.props.queue.title !== this.state.title) {
+    if (
+      this.state.title.length > 0 &&
+      this.props.queue.title !== this.state.title
+    ) {
       this.props.edit(this.state);
+    } else {
+      this.setState({
+        ...this.state,
+        title: this.props.queue.title,
+        editing: false
+      });
     }
   }
 
   render() {
     const queue = this.state;
+    const { taskList } = this.props;
+    const { newTask } = this.state;
 
     return (
       <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg">
@@ -88,7 +144,7 @@ class Queue extends React.Component {
                 onChange={this.handleChange}
                 onBlur={this.handleSubmit}
               />
-              <div className="invalid-feedback">No task title provided</div>
+              <div className="invalid-feedback">No queue task provided</div>
             </div>
           </div>
         ) : (
@@ -131,11 +187,58 @@ class Queue extends React.Component {
             </div>
           </div>
         )}
-        {queue.tasks && queue.tasks.length > 0 && (
+        {taskList && (
           <div className="flex flex-col mt-2">
-            {queue.tasks.map((task, index) => (
-              <TaskCard task={task} key={index} />
-            ))}
+            {taskList &&
+              taskList.length > 0 &&
+              taskList.map((task, index) => (
+                <TaskCard
+                  task={task}
+                  key={index}
+                  index={index}
+                  parentIndex={this.state.position}
+                />
+              ))}
+            <div className="input-group">
+              <input
+                type="text"
+                className="form-control"
+                name="title"
+                value={newTask.title}
+                placeholder="Add task"
+                onChange={this.handleNewTaskEdit}
+              />
+            </div>
+            {newTask.title.length > 0 && (
+              <div className="flex flex-row pt-3">
+                <button
+                  className="btn btn-success"
+                  onClick={this.handleAddTask}>
+                  Add
+                </button>
+                <button
+                  onClick={() =>
+                    this.setState({
+                      ...this.state,
+                      newTask: { title: '' }
+                    })
+                  }>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+            )}
           </div>
         )}
       </div>
@@ -145,12 +248,15 @@ class Queue extends React.Component {
 
 const mapStateToProps = (state, ownProps) => ({
   queue: state.queueList[ownProps.index],
-  board: state.board
+  board: state.board,
+  taskList: state.taskList[ownProps.index]
 });
 
 const actionCreators = {
   edit: queueActions.edit,
-  del: boardActions.deleteQueue
+  del: boardActions.deleteQueue,
+  addTasks: taskActions.addList,
+  addTask: taskActions.add
 };
 
 const connectedQueue = connect(mapStateToProps, actionCreators)(Queue);

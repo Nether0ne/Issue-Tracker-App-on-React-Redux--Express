@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 
-import { boardActions, queueActions } from '../../_actions';
+import { boardActions, queueActions, taskActions } from '../../_actions';
 import { Queue } from '../../_components';
 
 class BoardPage extends React.Component {
@@ -18,6 +18,7 @@ class BoardPage extends React.Component {
     };
 
     this.props.initQueue([]);
+    this.props.initTasks();
     this.handleChange = this.handleNewQueueChange.bind(this);
     this.handleAddQueue = this.handleAddQueue.bind(this);
     this.handleDeleteBoard = this.handleDeleteBoard.bind(this);
@@ -130,17 +131,18 @@ class BoardPage extends React.Component {
 
   updateQueues() {
     const { board } = this.props;
-    console.log(board);
+
     this.setState({
       ...this.state,
       board: board
     });
+
     this.props.initQueue(board.queues || []);
   }
 
   render() {
     const { board } = this.state;
-    const { queueList } = this.props;
+    const { queueList, user } = this.props;
     const { newQueue } = this.state;
     const { redirect, success } = this.props.board;
 
@@ -187,39 +189,43 @@ class BoardPage extends React.Component {
                   <h3>{this.state.board.title}</h3>
                 </div>
               )}
-              <div className="dropdown">
-                <a
-                  className="nav-link p-0"
-                  href="#"
-                  id="navbarDropdown"
-                  role="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    className="h-5 w-5 text-black"
-                    fill="none"
-                    viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
-                    />
-                  </svg>
-                </a>
-                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <li>
-                    <a
-                      className="dropdown-item"
-                      href="#"
-                      onClick={this.handleDeleteBoard}>
-                      Delete board
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              {user.id === this.state.board.createdBy && (
+                <div className="dropdown">
+                  <a
+                    className="nav-link p-0"
+                    href="#"
+                    id="navbarDropdown"
+                    role="button"
+                    data-bs-toggle="dropdown"
+                    aria-expanded="false">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      className="h-5 w-5 text-black"
+                      fill="none"
+                      viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                        strokeWidth={2}
+                        d="M5 12h.01M12 12h.01M19 12h.01M6 12a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0zm7 0a1 1 0 11-2 0 1 1 0 012 0z"
+                      />
+                    </svg>
+                  </a>
+                  <ul
+                    className="dropdown-menu"
+                    aria-labelledby="navbarDropdown">
+                    <li>
+                      <a
+                        className="dropdown-item"
+                        href="#"
+                        onClick={this.handleDeleteBoard}>
+                        Delete board
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              )}
             </div>
             <div className="overflow-x-auto">
               <div className="flex flex-nowrap w-min">
@@ -235,13 +241,13 @@ class BoardPage extends React.Component {
                     />
                   ))}
                 <div className="flex flex-col w-64 mt-4 mr-4 p-3 bg-gray-200 rounded-lg">
-                  <div className="input-group has-validation">
+                  <div className="input-group">
                     <input
                       type="text"
                       className="form-control"
                       name="title"
                       value={newQueue.title}
-                      placeholder="Add a list..."
+                      placeholder="Add list..."
                       onChange={(e) => this.handleNewQueueChange(e, 'newQueue')}
                     />
                   </div>
@@ -298,7 +304,8 @@ const actionCreators = {
   pushQueue: queueActions.push,
   popQueue: queueActions.pop,
   getQueue: queueActions.get,
-  initQueue: queueActions.init
+  initQueue: queueActions.init,
+  initTasks: taskActions.initList
 };
 
 const connectedBoardPage = connect(mapState, actionCreators)(BoardPage);

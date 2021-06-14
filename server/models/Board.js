@@ -26,7 +26,8 @@ const BoardSchema = new mongoose.Schema(
 BoardSchema.methods.toShortJSON = function () {
   return {
     id: this._id,
-    title: this.title
+    title: this.title,
+    createdBy: this.createdBy
   };
 };
 
